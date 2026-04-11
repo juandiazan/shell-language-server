@@ -1,0 +1,18 @@
+{
+  "name": "shell_language_server",
+  "description": "Shell Language Server created for a Uni subject",
+  "version": "1.0.0",
+  "author": "Juan Diaz",
+  "license": "MIT",
+  "engines": {
+    "node": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juandiazan/shell-language-server"
+  },
+  "dependencies": {
+    "vscode-languageserver": "^8.1.0",
+    "vscode-languageserver-textdocument": "^1.0.8"
+  }
+}

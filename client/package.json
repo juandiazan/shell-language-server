@@ -1,0 +1,21 @@
+{
+  "name": "shell_language_client",
+  "description": "Shell Language Client for VS Code created for a Uni subject",
+  "author": "Juan Diaz",
+  "license": "MIT",
+  "version": "0.0.1",
+  "publisher": "Juan Diaz",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juandiazan/shell-language-server"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.81.0"
+  }
+}
