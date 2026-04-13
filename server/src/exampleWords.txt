@@ -1,0 +1,16 @@
+if
+fi
+for
+alias
+echo
+grep
+ls
+sed
+source
+dirname
+read
+while
+case
+esac
+do
+in
