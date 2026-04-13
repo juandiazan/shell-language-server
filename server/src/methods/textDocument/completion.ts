@@ -44,11 +44,11 @@ export const completion = (message: RequestMessage): CompletionList | null => {
   const currentPrefix = lineUntilCursor.replace(/.*\W(.*?)/, "$1");
 
   const items = words
-    .filter((word) => {
+    .filter((word:string) => {
       return word.startsWith(currentPrefix);
     })
     .slice(0, 1000)
-    .map((word) => {
+    .map((word:string) => {
       return { label: word };
     });
 

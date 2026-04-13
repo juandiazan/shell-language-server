@@ -7,10 +7,10 @@ Content-Length: 145
 {"method":"$/setTrace"}
 {"method":"textDocument/didChange"}
 {"id":1,"method":"textDocument/completion"}
-{"completion":{"currentLine":"d","lineUntilCursor":"d","currentWord":"d"}}
-Content-Length: 84
+{"completion":{"currentLine":"al","lineUntilCursor":"al","currentWord":"al"}}
+Content-Length: 67
 
-{"id":1,"result":{"isIncomplete":true,"items":[{"label":"dirname"},{"label":"do"}]}}
+{"id":1,"result":{"isIncomplete":true,"items":[{"label":"alias"}]}}
 {"method":"textDocument/didChange"}
 {"method":"textDocument/didChange"}
 {"method":"textDocument/didChange"}
@@ -23,9 +23,23 @@ Content-Length: 79
 {"method":"textDocument/didChange"}
 {"method":"textDocument/didChange"}
 {"id":3,"method":"textDocument/completion"}
-{"completion":{"currentLine":"s","lineUntilCursor":"s","currentWord":"s"}}
-Content-Length: 84
+{"completion":{"currentLine":"c","lineUntilCursor":"c","currentWord":"c"}}
+Content-Length: 66
 
-{"id":3,"result":{"isIncomplete":true,"items":[{"label":"sed"},{"label":"source"}]}}
+{"id":3,"result":{"isIncomplete":true,"items":[{"label":"case"}]}}
 {"method":"textDocument/didChange"}
-{"id":4,"method":"shutdown"}
+{"id":4,"method":"textDocument/completion"}
+{"completion":{"currentLine":"ca","lineUntilCursor":"ca","currentWord":"ca"}}
+Content-Length: 66
+
+{"id":4,"result":{"isIncomplete":true,"items":[{"label":"case"}]}}
+{"method":"textDocument/didChange"}
+{"method":"textDocument/didChange"}
+{"method":"textDocument/didChange"}
+{"id":5,"method":"textDocument/completion"}
+{"completion":{"currentLine":"e","lineUntilCursor":"e","currentWord":"e"}}
+Content-Length: 83
+
+{"id":5,"result":{"isIncomplete":true,"items":[{"label":"esac"},{"label":"echo"}]}}
+{"method":"textDocument/didChange"}
+{"id":6,"method":"shutdown"}
