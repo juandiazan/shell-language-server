@@ -1,23 +1,31 @@
 {"id":0,"method":"initialize"}
-Content-Length: 124
+Content-Length: 145
 
-{"id":0,"result":{"capabilities":{"completionProvider":{}},"serverInfo":{"name":"shell-language-server","version":"0.0.1"}}}
+{"id":0,"result":{"capabilities":{"completionProvider":{},"textDocumentSync":1},"serverInfo":{"name":"shell-language-server","version":"0.0.1"}}}
 {"method":"initialized"}
+{"method":"textDocument/didOpen"}
 {"method":"$/setTrace"}
+{"method":"textDocument/didChange"}
 {"id":1,"method":"textDocument/completion"}
-Content-Length: 317
+{"completion":{"currentLine":"d","lineUntilCursor":"d","currentWord":"d"}}
+Content-Length: 84
 
-{"id":1,"result":{"isIncomplete":false,"items":[{"label":"if"},{"label":"fi"},{"label":"for"},{"label":"alias"},{"label":"echo"},{"label":"grep"},{"label":"ls"},{"label":"sed"},{"label":"source"},{"label":"dirname"},{"label":"read"},{"label":"while"},{"label":"case"},{"label":"esac"},{"label":"do"},{"label":"in"}]}}
+{"id":1,"result":{"isIncomplete":true,"items":[{"label":"dirname"},{"label":"do"}]}}
+{"method":"textDocument/didChange"}
+{"method":"textDocument/didChange"}
+{"method":"textDocument/didChange"}
 {"id":2,"method":"textDocument/completion"}
-Content-Length: 317
+{"completion":{"currentLine":"i","lineUntilCursor":"i","currentWord":"i"}}
+Content-Length: 79
 
-{"id":2,"result":{"isIncomplete":false,"items":[{"label":"if"},{"label":"fi"},{"label":"for"},{"label":"alias"},{"label":"echo"},{"label":"grep"},{"label":"ls"},{"label":"sed"},{"label":"source"},{"label":"dirname"},{"label":"read"},{"label":"while"},{"label":"case"},{"label":"esac"},{"label":"do"},{"label":"in"}]}}
+{"id":2,"result":{"isIncomplete":true,"items":[{"label":"if"},{"label":"in"}]}}
+{"method":"textDocument/didChange"}
+{"method":"textDocument/didChange"}
+{"method":"textDocument/didChange"}
 {"id":3,"method":"textDocument/completion"}
-Content-Length: 317
+{"completion":{"currentLine":"s","lineUntilCursor":"s","currentWord":"s"}}
+Content-Length: 84
 
-{"id":3,"result":{"isIncomplete":false,"items":[{"label":"if"},{"label":"fi"},{"label":"for"},{"label":"alias"},{"label":"echo"},{"label":"grep"},{"label":"ls"},{"label":"sed"},{"label":"source"},{"label":"dirname"},{"label":"read"},{"label":"while"},{"label":"case"},{"label":"esac"},{"label":"do"},{"label":"in"}]}}
-{"id":4,"method":"textDocument/completion"}
-Content-Length: 317
-
-{"id":4,"result":{"isIncomplete":false,"items":[{"label":"if"},{"label":"fi"},{"label":"for"},{"label":"alias"},{"label":"echo"},{"label":"grep"},{"label":"ls"},{"label":"sed"},{"label":"source"},{"label":"dirname"},{"label":"read"},{"label":"while"},{"label":"case"},{"label":"esac"},{"label":"do"},{"label":"in"}]}}
-{"id":5,"method":"shutdown"}
+{"id":3,"result":{"isIncomplete":true,"items":[{"label":"sed"},{"label":"source"}]}}
+{"method":"textDocument/didChange"}
+{"id":4,"method":"shutdown"}

@@ -12,7 +12,7 @@ interface InitializeResult {
 
 export const initialize = (message: RequestMessage): InitializeResult => {
   return {
-    capabilities: { completionProvider: {} },
+    capabilities: { completionProvider: {}, textDocumentSync: 1 },
     serverInfo: {
       name: "shell-language-server",
       version: "0.0.1",
