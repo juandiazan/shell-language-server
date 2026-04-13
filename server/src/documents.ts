@@ -9,6 +9,12 @@ export interface VersionedTextDocumentIdentifier extends TextDocumentIdentifier 
   version: number;
 }
 
+export interface TextDocumentItem extends TextDocumentIdentifier {
+  languageId: string;
+  version: number;
+  text: string;
+}
+
 export interface TextDocumentContentChangeEvent {
   text: string;
 }

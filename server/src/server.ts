@@ -1,7 +1,10 @@
 import log from "./log";
 import { initialize } from "./methods/initialize";
 import { completion } from "./methods/textDocument/completion";
+import { definition } from "./methods/textDocument/definition";
 import { didChange } from "./methods/textDocument/didChange";
+import { didOpen } from "./methods/textDocument/didOpen";
+import { didClose } from "./methods/textDocument/didClose";
 
 interface Message {
   jsonrpc: string;
@@ -18,13 +21,19 @@ export interface RequestMessage extends NotificationMessage {
 
 type RequestMethod = (
   message: RequestMessage,
-) => ReturnType<typeof initialize> | ReturnType<typeof completion>;
+) =>
+  | ReturnType<typeof initialize>
+  | ReturnType<typeof completion>
+  | ReturnType<typeof definition>;
 
 type NotificationMethod = (message: NotificationMessage) => void;
 
 const methodLookup: Record<string, RequestMethod | NotificationMethod> = {
   initialize,
   "textDocument/completion": completion,
+  "textDocument/definition": definition,
+  "textDocument/didOpen": didOpen,
+  "textDocument/didClose": didClose,
   "textDocument/didChange": didChange,
 };
 

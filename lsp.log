@@ -1,45 +1,59 @@
 {"id":0,"method":"initialize"}
-Content-Length: 145
+Content-Length: 171
 
-{"id":0,"result":{"capabilities":{"completionProvider":{},"textDocumentSync":1},"serverInfo":{"name":"shell-language-server","version":"0.0.1"}}}
+{"id":0,"result":{"capabilities":{"completionProvider":{},"definitionProvider":true,"textDocumentSync":1},"serverInfo":{"name":"shell-language-server","version":"0.0.1"}}}
 {"method":"initialized"}
 {"method":"textDocument/didOpen"}
 {"method":"$/setTrace"}
 {"method":"textDocument/didChange"}
 {"id":1,"method":"textDocument/completion"}
-{"completion":{"currentLine":"al","lineUntilCursor":"al","currentWord":"al"}}
-Content-Length: 67
+{"completion":{"currentLine":"t","lineUntilCursor":"t","currentWord":"t"}}
+Content-Length: 65
 
-{"id":1,"result":{"isIncomplete":true,"items":[{"label":"alias"}]}}
-{"method":"textDocument/didChange"}
-{"method":"textDocument/didChange"}
+{"id":1,"result":{"isIncomplete":true,"items":[{"label":"tar"}]}}
 {"method":"textDocument/didChange"}
 {"id":2,"method":"textDocument/completion"}
-{"completion":{"currentLine":"i","lineUntilCursor":"i","currentWord":"i"}}
-Content-Length: 79
+{"completion":{"currentLine":"te","lineUntilCursor":"te","currentWord":"te"}}
+Content-Length: 50
 
-{"id":2,"result":{"isIncomplete":true,"items":[{"label":"if"},{"label":"in"}]}}
-{"method":"textDocument/didChange"}
-{"method":"textDocument/didChange"}
+{"id":2,"result":{"isIncomplete":true,"items":[]}}
 {"method":"textDocument/didChange"}
 {"id":3,"method":"textDocument/completion"}
-{"completion":{"currentLine":"c","lineUntilCursor":"c","currentWord":"c"}}
-Content-Length: 66
+{"completion":{"currentLine":"tes","lineUntilCursor":"tes","currentWord":"tes"}}
+Content-Length: 50
 
-{"id":3,"result":{"isIncomplete":true,"items":[{"label":"case"}]}}
+{"id":3,"result":{"isIncomplete":true,"items":[]}}
 {"method":"textDocument/didChange"}
 {"id":4,"method":"textDocument/completion"}
-{"completion":{"currentLine":"ca","lineUntilCursor":"ca","currentWord":"ca"}}
-Content-Length: 66
+{"completion":{"currentLine":"test","lineUntilCursor":"test","currentWord":"test"}}
+Content-Length: 50
 
-{"id":4,"result":{"isIncomplete":true,"items":[{"label":"case"}]}}
+{"id":4,"result":{"isIncomplete":true,"items":[]}}
+{"method":"textDocument/didChange"}
+{"method":"textDocument/didChange"}
 {"method":"textDocument/didChange"}
 {"method":"textDocument/didChange"}
 {"method":"textDocument/didChange"}
 {"id":5,"method":"textDocument/completion"}
-{"completion":{"currentLine":"e","lineUntilCursor":"e","currentWord":"e"}}
-Content-Length: 83
+{"completion":{"currentLine":"t","lineUntilCursor":"t","currentWord":"t"}}
+Content-Length: 65
 
-{"id":5,"result":{"isIncomplete":true,"items":[{"label":"esac"},{"label":"echo"}]}}
+{"id":5,"result":{"isIncomplete":true,"items":[{"label":"tar"}]}}
 {"method":"textDocument/didChange"}
-{"id":6,"method":"shutdown"}
+{"id":6,"method":"textDocument/completion"}
+{"completion":{"currentLine":"te","lineUntilCursor":"te","currentWord":"te"}}
+Content-Length: 50
+
+{"id":6,"result":{"isIncomplete":true,"items":[]}}
+{"method":"textDocument/didChange"}
+{"id":7,"method":"textDocument/completion"}
+{"completion":{"currentLine":"tes","lineUntilCursor":"tes","currentWord":"tes"}}
+Content-Length: 50
+
+{"id":7,"result":{"isIncomplete":true,"items":[]}}
+{"method":"textDocument/didChange"}
+{"id":8,"method":"textDocument/definition"}
+Content-Length: 167
+
+{"id":8,"result":{"uri":"file:///home/juan/ort-proyectos/shell-language-server/testFile.sh","range":{"start":{"line":0,"character":0},"end":{"line":0,"character":4}}}}
+{"id":9,"method":"shutdown"}
