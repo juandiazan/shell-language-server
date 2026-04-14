@@ -108,41 +108,50 @@ export const definition = (message: RequestMessage): Location | null => {
   const params = message.params as DefinitionParams;
   const content = documents.get(params.textDocument.uri);
 
+  // checks content from document obtained from documents map
   if (!content) {
     return null;
   }
 
+  // checks current line
   const line = content.split("\n")[params.position.line];
   if (line === undefined) {
     return null;
   }
 
+  // checks current word
   const symbol = wordAtPosition(line, params.position.character);
   if (!symbol) {
     return null;
   }
 
+  // gets definition from document content
   const currentDocumentDefinition = findDefinitionInContent(
     params.textDocument.uri,
     content,
     symbol,
   );
 
+  // if definition is found its location is returned
   if (currentDocumentDefinition) {
     return currentDocumentDefinition;
   }
 
+  // if definition is not found, look for it on every open document
   for (const [uri, documentContent] of documents.entries()) {
+    // if document is current, skip it
     if (uri === params.textDocument.uri) {
       continue;
     }
 
+    // look for definition on document
     const definitionInOpenDocument = findDefinitionInContent(
       uri,
       documentContent,
       symbol,
     );
 
+    // if definition is found its location is returned
     if (definitionInOpenDocument) {
       return definitionInOpenDocument;
     }

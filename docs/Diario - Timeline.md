@@ -36,4 +36,6 @@ Video visto de implementación de LSP ([Video](www.youtube.com/watch?v=p0Vlz66AF
 
 # 13/04/26
 
-Video de día anterior terminado y filtrado de símbolos para completar implementado.
+- Video de día anterior terminado y filtrado de símbolos para completar implementado.
+
+- Implementación de Go-To Definition para funciones.
