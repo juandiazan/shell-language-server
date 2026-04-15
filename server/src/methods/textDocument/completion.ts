@@ -3,6 +3,8 @@ import { documents, TextDocumentIdentifier } from "../../documents";
 import * as fs from "fs";
 import log from "../../log";
 
+const MAX_LENGTH = 1000;
+
 const words = fs
   .readFileSync(
     "/home/juan/ort-proyectos/shell-language-server/server/src/exampleWords.txt",
@@ -44,11 +46,11 @@ export const completion = (message: RequestMessage): CompletionList | null => {
   const currentPrefix = lineUntilCursor.replace(/.*\W(.*?)/, "$1");
 
   const items = words
-    .filter((word:string) => {
+    .filter((word: string) => {
       return word.startsWith(currentPrefix);
     })
-    .slice(0, 1000)
-    .map((word:string) => {
+    .slice(0, MAX_LENGTH)
+    .map((word: string) => {
       return { label: word };
     });
 
@@ -61,7 +63,7 @@ export const completion = (message: RequestMessage): CompletionList | null => {
   });
 
   return {
-    isIncomplete: true,
+    isIncomplete: items.length === MAX_LENGTH,
     items,
   };
 };
