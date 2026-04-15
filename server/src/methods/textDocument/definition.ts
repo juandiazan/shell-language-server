@@ -1,21 +1,6 @@
 import { documents, TextDocumentIdentifier } from "../../documents";
 import { RequestMessage } from "../../server";
-
-interface Position {
-  line: number;
-  character: number;
-}
-
-interface Range {
-  start: Position;
-  end: Position;
-}
-
-interface Location {
-  uri: string;
-  range: Range;
-}
-
+import { Position, Location } from "../../types";
 interface TextDocumentPositionParams {
   textDocument: TextDocumentIdentifier;
   position: Position;
