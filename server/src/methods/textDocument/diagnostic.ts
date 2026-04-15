@@ -1,0 +1,222 @@
+import { RequestMessage } from "../../server";
+import { documents, TextDocumentIdentifier } from "../../documents";
+import { Range } from "../../types";
+
+namespace DiagnosticSeverity {
+  export const Error: 1 = 1;
+  export const Warning: 2 = 2;
+  export const Information: 3 = 3;
+  export const Hint: 4 = 4;
+}
+
+type DiagnosticSeverity = 1 | 2 | 3 | 4;
+
+interface Diagnostic {
+  range: Range;
+  severity: DiagnosticSeverity;
+  source: "shell-language-server";
+  message: string;
+  data?: unknown;
+}
+
+interface FullDocumentDiagnosticReport {
+  kind: "full";
+  items: Diagnostic[];
+}
+
+interface DocumentDiagnosticParams {
+  textDocument: TextDocumentIdentifier;
+}
+
+type OpeningBracket = "(" | "[" | "{";
+type ClosingBracket = ")" | "]" | "}";
+
+interface BracketToken {
+  char: OpeningBracket;
+  line: number;
+  character: number;
+}
+
+/**
+ * Maps opening brackets to their expected closing counterparts.
+ */
+const openingToClosingBracket = {
+  "(": ")",
+  "[": "]",
+  "{": "}",
+} as const;
+
+/**
+ * Maps closing brackets to their expected opening counterparts.
+ */
+const closingToOpeningBracket = {
+  ")": "(",
+  "]": "[",
+  "}": "{",
+} as const;
+
+/**
+ * Returns whether a character is one of the supported opening brackets.
+ *
+ * @param char Character to inspect.
+ */
+const isOpeningBracket = (char: string): boolean => {
+  return char === "(" || char === "[" || char === "{";
+};
+
+/**
+ * Returns whether a character is one of the supported closing brackets.
+ *
+ * @param char Character to inspect.
+ */
+const isClosingBracket = (char: string): boolean => {
+  return char === ")" || char === "]" || char === "}";
+};
+
+/**
+ * Builds a single-character range at a specific line/column location.
+ *
+ * @param line Zero-based line index.
+ * @param character Zero-based character index.
+ * @returns LSP range covering one character.
+ */
+const singleCharacterRange = (line: number, character: number): Range => ({
+  start: { line, character },
+  end: { line, character: character + 1 },
+});
+
+/**
+ * Produces diagnostics for unmatched or mismatched brackets in shell content.
+ *
+ * Brackets inside comments and quoted strings are ignored.
+ *
+ * @param content Full document text.
+ * @returns Diagnostic list for detected bracket issues.
+ */
+const bracketDiagnostics = (content: string): Diagnostic[] => {
+  const diagnostics: Diagnostic[] = [];
+  const bracketStack: BracketToken[] = [];
+  const lines = content.split("\n");
+
+  let inSingleQuotes = false;
+  let inDoubleQuotes = false;
+
+  for (let lineNumber = 0; lineNumber < lines.length; lineNumber += 1) {
+    const line = lines[lineNumber];
+
+    for (let character = 0; character < line.length; character += 1) {
+      const currentChar = line[character];
+
+      // check for comment
+      if (!inSingleQuotes && !inDoubleQuotes && currentChar === "#") {
+        break;
+      }
+
+      if (currentChar === "\\" && !inSingleQuotes) {
+        character += 1;
+        continue;
+      }
+
+      // enter or leave single quote string if not in double quote string
+      if (currentChar === "'" && !inDoubleQuotes) {
+        inSingleQuotes = !inSingleQuotes;
+        continue;
+      }
+
+      // enter or leave double quote string if not in single quote string
+      if (currentChar === '"' && !inSingleQuotes) {
+        inDoubleQuotes = !inDoubleQuotes;
+        continue;
+      }
+
+      // if inside a string, keep checking line
+      if (inSingleQuotes || inDoubleQuotes) {
+        continue;
+      }
+
+      if (isOpeningBracket(currentChar)) {
+        bracketStack.push({
+          char: currentChar as OpeningBracket,
+          line: lineNumber,
+          character,
+        });
+        continue;
+      }
+
+      if (!isClosingBracket(currentChar)) {
+        continue;
+      }
+
+      // if current character is a closing bracket, get corresponding opening bracket
+      const expectedOpeningBracket =
+        closingToOpeningBracket[currentChar as ClosingBracket];
+      const openingBracket = bracketStack.at(-1);
+
+      // if no opening bracket is found, add an error
+      if (!openingBracket) {
+        diagnostics.push({
+          severity: DiagnosticSeverity.Error,
+          message: `Unmatched closing bracket "${currentChar}".`,
+          source: "shell-language-server",
+          range: singleCharacterRange(lineNumber, character),
+        });
+        continue;
+      }
+
+      // if opening bracket is found but is mismatched, add an error
+      if (openingBracket.char !== expectedOpeningBracket) {
+        const expectedClosingBracket =
+          openingToClosingBracket[openingBracket.char as OpeningBracket];
+
+        diagnostics.push({
+          severity: DiagnosticSeverity.Error,
+          message: `Mismatched closing bracket "${currentChar}". Expected "${expectedClosingBracket}" to match "${openingBracket.char}".`,
+          source: "shell-language-server",
+          range: singleCharacterRange(lineNumber, character),
+        });
+        continue;
+      }
+
+      bracketStack.pop();
+    }
+  }
+
+  // if there are opening brackets left in stack, add an error for each one
+  while (bracketStack.length > 0) {
+    const openingBracket = bracketStack.pop() as BracketToken;
+    diagnostics.push({
+      severity: DiagnosticSeverity.Error,
+      message: `Unmatched opening bracket "${openingBracket.char}".`,
+      source: "shell-language-server",
+      range: singleCharacterRange(
+        openingBracket.line,
+        openingBracket.character,
+      ),
+    });
+  }
+
+  return diagnostics;
+};
+
+/**
+ * Handles `textDocument/diagnostic` requests and returns full-document
+ * diagnostics for bracket matching errors.
+ *
+ * @param message JSON-RPC request containing document diagnostic params.
+ * @returns Full diagnostic report for the requested document.
+ */
+export const diagnostic = (
+  message: RequestMessage,
+): FullDocumentDiagnosticReport | null => {
+  const params = message.params as DocumentDiagnosticParams;
+  const content = documents.get(params.textDocument.uri);
+
+  if (!content) {
+    return null;
+  }
+
+  return {
+    kind: "full",
+    items: bracketDiagnostics(content),
+  };
+};

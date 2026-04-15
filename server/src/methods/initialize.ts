@@ -16,6 +16,10 @@ export const initialize = (message: RequestMessage): InitializeResult => {
       completionProvider: {},
       definitionProvider: true,
       textDocumentSync: 1,
+      diagnosticProvider: {
+        interFileDependencies: false,
+        workspaceDiagnostics: false,
+      },
     },
     serverInfo: {
       name: "shell-language-server",
