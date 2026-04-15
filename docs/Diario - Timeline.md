@@ -39,3 +39,7 @@ Video visto de implementación de LSP ([Video](www.youtube.com/watch?v=p0Vlz66AF
 - Video de día anterior terminado y filtrado de símbolos para completar implementado.
 
 - Implementación de Go-To Definition para funciones.
+
+# 15/04/2026
+
+- Comentarios agregados a definition.ts
