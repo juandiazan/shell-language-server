@@ -73,6 +73,8 @@ const isClosingBracket = (char: string): boolean => {
   return char === ")" || char === "]" || char === "}";
 };
 
+const isWordCharacter = (char: string): boolean => /[A-Za-z0-9_]/.test(char);
+
 /**
  * Builds a single-character range at a specific line/column location.
  *
@@ -88,7 +90,9 @@ const singleCharacterRange = (line: number, character: number): Range => ({
 /**
  * Produces diagnostics for unmatched or mismatched brackets in shell content.
  *
- * Brackets inside comments and quoted strings are ignored.
+ * Brackets inside comments and quoted strings are ignored. Inside `case` blocks,
+ * pattern headers are ignored until `)` is reached, then bracket checks run for
+ * the clause body until `;;`.
  *
  * @param content Full document text.
  * @returns Diagnostic list for detected bracket issues.
@@ -100,37 +104,94 @@ const bracketDiagnostics = (content: string): Diagnostic[] => {
 
   let inSingleQuotes = false;
   let inDoubleQuotes = false;
+  let inCaseBlock = false;
+  let inCaseClauseBody = false;
+
+  // checks if token is inside a case
+  const processWord = (word: string): void => {
+    if (!word.length) {
+      return;
+    }
+
+    if (word === "case") {
+      inCaseBlock = true;
+      inCaseClauseBody = false;
+      return;
+    }
+
+    if (word === "esac") {
+      inCaseBlock = false;
+      inCaseClauseBody = false;
+    }
+  };
 
   for (let lineNumber = 0; lineNumber < lines.length; lineNumber += 1) {
     const line = lines[lineNumber];
+    let currentWord = "";
 
     for (let character = 0; character < line.length; character += 1) {
       const currentChar = line[character];
 
       // check for comment
       if (!inSingleQuotes && !inDoubleQuotes && currentChar === "#") {
+        processWord(currentWord);
         break;
       }
 
       if (currentChar === "\\" && !inSingleQuotes) {
+        processWord(currentWord);
+        currentWord = "";
         character += 1;
         continue;
       }
 
       // enter or leave single quote string if not in double quote string
       if (currentChar === "'" && !inDoubleQuotes) {
+        processWord(currentWord);
+        currentWord = "";
         inSingleQuotes = !inSingleQuotes;
         continue;
       }
 
       // enter or leave double quote string if not in single quote string
       if (currentChar === '"' && !inSingleQuotes) {
+        processWord(currentWord);
+        currentWord = "";
         inDoubleQuotes = !inDoubleQuotes;
         continue;
       }
 
       // if inside a string, keep checking line
       if (inSingleQuotes || inDoubleQuotes) {
+        continue;
+      }
+
+      if (isWordCharacter(currentChar)) {
+        currentWord += currentChar;
+      } else {
+        processWord(currentWord);
+        currentWord = "";
+      }
+
+      // entering a case clause
+      if (inCaseBlock && !inCaseClauseBody && currentChar === ")") {
+        inCaseClauseBody = true;
+        continue;
+      }
+
+      // leaving a case clause
+      if (inCaseBlock && inCaseClauseBody && line.startsWith(";;", character)) {
+        inCaseClauseBody = false;
+        character += 1;
+        continue;
+      }
+
+      // if current token is in case body but not inside a case clause do nothing
+      if (
+        inCaseBlock &&
+        !inCaseClauseBody &&
+        (isOpeningBracket(currentChar) || isClosingBracket(currentChar))
+      ) {
         continue;
       }
 
@@ -179,6 +240,8 @@ const bracketDiagnostics = (content: string): Diagnostic[] => {
 
       bracketStack.pop();
     }
+
+    processWord(currentWord);
   }
 
   // if there are opening brackets left in stack, add an error for each one
