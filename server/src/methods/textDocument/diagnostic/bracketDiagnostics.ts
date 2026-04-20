@@ -459,7 +459,7 @@ const buildBracketDiagnostic = (
     message,
     source: "shell-language-server",
     range: singleCharacterRange(line, character),
-    data: DiagnosticType.MissingBracket,
+    data: { type: DiagnosticType.MissingBracket },
   };
 };
 

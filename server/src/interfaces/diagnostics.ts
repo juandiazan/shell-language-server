@@ -1,6 +1,10 @@
 import { Range } from "./location";
 import { TextDocumentIdentifier } from "./documents";
 
+interface DiagnosticData {
+  type: DiagnosticType;
+}
+
 type DiagnosticType = "missing-semicolon" | "missing-bracket";
 export namespace DiagnosticType {
   export const MissingSemicolon: DiagnosticType = "missing-semicolon";
@@ -20,7 +24,7 @@ export interface Diagnostic {
   severity: DiagnosticSeverity;
   source: "shell-language-server";
   message: string;
-  data: DiagnosticType;
+  data: DiagnosticData;
 }
 
 export interface FullDocumentDiagnosticReport {

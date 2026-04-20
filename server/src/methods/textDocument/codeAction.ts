@@ -30,8 +30,8 @@ interface CodeActionParams {
 
 interface CodeAction {
   title: string;
-  kind?: CodeActionKind;
-  edit?: WorkspaceEdit;
+  kind: CodeActionKind;
+  edit: WorkspaceEdit;
   data?: unknown;
 }
 
@@ -41,7 +41,7 @@ export const codeAction = (message: RequestMessage): CodeAction[] | null => {
   const diagnostics = params.context.diagnostics;
 
   const missingSemicolonDiagnostics = diagnostics.filter(
-    (diagnostic) => diagnostic.data === DiagnosticType.MissingSemicolon,
+    (diagnostic) => diagnostic.data.type === DiagnosticType.MissingSemicolon,
   );
   const missingSemicolonActions = missingSemicolonDiagnostics.map(
     (diagnostic) => {

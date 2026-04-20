@@ -253,7 +253,7 @@ const buildMissingSemicolonDiagnostic = (
     message: `Missing semicolon before "${word}" in structure condition.`,
     source: "shell-language-server",
     range: wordRange(lineNumber, wordStartCharacter, word.length),
-    data: DiagnosticType.MissingSemicolon,
+    data: { type: DiagnosticType.MissingSemicolon },
   };
 };
 
