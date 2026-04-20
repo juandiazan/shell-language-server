@@ -50,7 +50,6 @@ Video visto de implementación de LSP ([Video](www.youtube.com/watch?v=p0Vlz66AF
 ## 13/04/26
 
 - Video de día anterior terminado y filtrado de símbolos para completar implementado.
-
 - Implementación de Go-To Definition para funciones.
 
 ## 15/04/2026
@@ -60,4 +59,9 @@ Video visto de implementación de LSP ([Video](www.youtube.com/watch?v=p0Vlz66AF
 
 ## 19/04/2026
 
-- Implementación de Code diagnostics para semicolons en estructuras de control
+Implementación de Code diagnostics para semicolons en estructuras de control
+
+## 20/04/2026
+
+- Video de implementación de LSP ([Video](https://www.youtube.com/watch?v=t1nI8i-D4oM))
+- Implementación de Code action para inserción de semicolons faltantes en estructuras de control
