@@ -1,5 +1,5 @@
 import { NotificationMessage } from "../../server";
-import { documents, TextDocumentItem } from "../../documents";
+import { documents, TextDocumentItem } from "../../interfaces/documents";
 
 interface DidOpenTextDocumentParams {
   textDocument: TextDocumentItem;

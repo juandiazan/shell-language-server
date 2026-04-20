@@ -3,7 +3,7 @@ import {
   documents,
   VersionedTextDocumentIdentifier,
   TextDocumentContentChangeEvent,
-} from "../../documents";
+} from "../../interfaces/documents";
 import log from "../../log";
 
 interface DidChangeTextDocumentParams {

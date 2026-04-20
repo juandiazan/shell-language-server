@@ -57,3 +57,7 @@ Video visto de implementación de LSP ([Video](www.youtube.com/watch?v=p0Vlz66AF
 
 - Comentarios agregados a definition.ts
 - Implementación de Code diagnostics para paréntesis, brackets y llaves
+
+## 19/04/2026
+
+- Implementación de Code diagnostics para semicolons en estructuras de control

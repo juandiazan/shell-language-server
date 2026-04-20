@@ -5,7 +5,7 @@ import { definition } from "./methods/textDocument/definition";
 import { didChange } from "./methods/textDocument/didChange";
 import { didOpen } from "./methods/textDocument/didOpen";
 import { didClose } from "./methods/textDocument/didClose";
-import { diagnostic } from "./methods/textDocument/diagnostic";
+import { diagnostic } from "./methods/textDocument/diagnostic/diagnostic";
 
 interface Message {
   jsonrpc: string;

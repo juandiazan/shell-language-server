@@ -1,5 +1,5 @@
 import { NotificationMessage } from "../../server";
-import { documents, TextDocumentIdentifier } from "../../documents";
+import { documents, TextDocumentIdentifier } from "../../interfaces/documents";
 
 interface DidCloseTextDocumentParams {
   textDocument: TextDocumentIdentifier;

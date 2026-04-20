@@ -1,32 +1,8 @@
-import { RequestMessage } from "../../server";
-import { documents, TextDocumentIdentifier } from "../../documents";
-import { Range } from "../../types";
-
-namespace DiagnosticSeverity {
-  export const Error: 1 = 1;
-  export const Warning: 2 = 2;
-  export const Information: 3 = 3;
-  export const Hint: 4 = 4;
-}
-
-type DiagnosticSeverity = 1 | 2 | 3 | 4;
-
-interface Diagnostic {
-  range: Range;
-  severity: DiagnosticSeverity;
-  source: "shell-language-server";
-  message: string;
-  data?: unknown;
-}
-
-interface FullDocumentDiagnosticReport {
-  kind: "full";
-  items: Diagnostic[];
-}
-
-interface DocumentDiagnosticParams {
-  textDocument: TextDocumentIdentifier;
-}
+import { Range } from "../../../interfaces/location";
+import {
+  Diagnostic,
+  DiagnosticSeverity,
+} from "../../../interfaces/diagnostics";
 
 type OpeningBracket = "(" | "[" | "{";
 type ClosingBracket = ")" | "]" | "}";
@@ -56,38 +32,6 @@ const closingToOpeningBracket = {
 } as const;
 
 /**
- * Returns whether a character is one of the supported opening brackets.
- *
- * @param char Character to inspect.
- */
-const isOpeningBracket = (char: string): boolean => {
-  return char === "(" || char === "[" || char === "{";
-};
-
-/**
- * Returns whether a character is one of the supported closing brackets.
- *
- * @param char Character to inspect.
- */
-const isClosingBracket = (char: string): boolean => {
-  return char === ")" || char === "]" || char === "}";
-};
-
-const isWordCharacter = (char: string): boolean => /[A-Za-z0-9_]/.test(char);
-
-/**
- * Builds a single-character range at a specific line/column location.
- *
- * @param line Zero-based line index.
- * @param character Zero-based character index.
- * @returns LSP range covering one character.
- */
-const singleCharacterRange = (line: number, character: number): Range => ({
-  start: { line, character },
-  end: { line, character: character + 1 },
-});
-
-/**
  * Produces diagnostics for unmatched or mismatched brackets in shell content.
  *
  * Brackets inside comments and quoted strings are ignored. Inside `case` blocks,
@@ -97,7 +41,7 @@ const singleCharacterRange = (line: number, character: number): Range => ({
  * @param content Full document text.
  * @returns Diagnostic list for detected bracket issues.
  */
-const bracketDiagnostics = (content: string): Diagnostic[] => {
+export const bracketDiagnostics = (content: string): Diagnostic[] => {
   const diagnostics: Diagnostic[] = [];
   const bracketStack: BracketToken[] = [];
   const lines = content.split("\n");
@@ -262,24 +206,33 @@ const bracketDiagnostics = (content: string): Diagnostic[] => {
 };
 
 /**
- * Handles `textDocument/diagnostic` requests and returns full-document
- * diagnostics for bracket matching errors.
+ * Returns whether a character is one of the supported opening brackets.
  *
- * @param message JSON-RPC request containing document diagnostic params.
- * @returns Full diagnostic report for the requested document.
+ * @param char Character to inspect.
  */
-export const diagnostic = (
-  message: RequestMessage,
-): FullDocumentDiagnosticReport | null => {
-  const params = message.params as DocumentDiagnosticParams;
-  const content = documents.get(params.textDocument.uri);
-
-  if (!content) {
-    return null;
-  }
-
-  return {
-    kind: "full",
-    items: bracketDiagnostics(content),
-  };
+const isOpeningBracket = (char: string): boolean => {
+  return char === "(" || char === "[" || char === "{";
 };
+
+/**
+ * Returns whether a character is one of the supported closing brackets.
+ *
+ * @param char Character to inspect.
+ */
+const isClosingBracket = (char: string): boolean => {
+  return char === ")" || char === "]" || char === "}";
+};
+
+const isWordCharacter = (char: string): boolean => /[A-Za-z0-9_]/.test(char);
+
+/**
+ * Builds a single-character range at a specific line/column location.
+ *
+ * @param line Zero-based line index.
+ * @param character Zero-based character index.
+ * @returns LSP range covering one character.
+ */
+const singleCharacterRange = (line: number, character: number): Range => ({
+  start: { line, character },
+  end: { line, character: character + 1 },
+});

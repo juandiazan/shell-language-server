@@ -1,6 +1,6 @@
-import { documents, TextDocumentIdentifier } from "../../documents";
+import { documents, TextDocumentIdentifier } from "../../interfaces/documents";
 import { RequestMessage } from "../../server";
-import { Position, Location } from "../../types";
+import { Position, Location } from "../../interfaces/location";
 interface TextDocumentPositionParams {
   textDocument: TextDocumentIdentifier;
   position: Position;

@@ -1,5 +1,5 @@
 import { RequestMessage } from "../../server";
-import { documents, TextDocumentIdentifier } from "../../documents";
+import { documents, TextDocumentIdentifier } from "../../interfaces/documents";
 import * as fs from "fs";
 import log from "../../log";
 
