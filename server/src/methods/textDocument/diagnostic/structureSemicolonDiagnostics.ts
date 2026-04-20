@@ -2,6 +2,7 @@ import { Range } from "../../../interfaces/location";
 import {
   Diagnostic,
   DiagnosticSeverity,
+  DiagnosticType,
 } from "../../../interfaces/diagnostics";
 
 interface PendingStructureSemicolonCheck {
@@ -252,6 +253,7 @@ const buildMissingSemicolonDiagnostic = (
     message: `Missing semicolon before "${word}" in structure condition.`,
     source: "shell-language-server",
     range: wordRange(lineNumber, wordStartCharacter, word.length),
+    data: DiagnosticType.MissingSemicolon,
   };
 };
 

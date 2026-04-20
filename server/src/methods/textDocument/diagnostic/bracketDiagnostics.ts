@@ -2,6 +2,7 @@ import { Range } from "../../../interfaces/location";
 import {
   Diagnostic,
   DiagnosticSeverity,
+  DiagnosticType,
 } from "../../../interfaces/diagnostics";
 
 type OpeningBracket = "(" | "[" | "{";
@@ -404,7 +405,7 @@ const processClosingBracket = (
 
   if (openingBracket.char !== expectedMatchingOpeningBracket) {
     const expectedMatchingClosingBracket =
-      openingToClosingBracket[openingBracket.char];
+      openingToClosingBracket[openingBracket.char as OpeningBracket];
 
     diagnostics.push(
       buildBracketDiagnostic(
@@ -458,6 +459,7 @@ const buildBracketDiagnostic = (
     message,
     source: "shell-language-server",
     range: singleCharacterRange(line, character),
+    data: DiagnosticType.MissingBracket,
   };
 };
 

@@ -6,6 +6,7 @@ import { didChange } from "./methods/textDocument/didChange";
 import { didOpen } from "./methods/textDocument/didOpen";
 import { didClose } from "./methods/textDocument/didClose";
 import { diagnostic } from "./methods/textDocument/diagnostic/diagnostic";
+import { codeAction } from "./methods/textDocument/codeAction";
 
 interface Message {
   jsonrpc: string;
@@ -26,7 +27,8 @@ type RequestMethod = (
   | ReturnType<typeof initialize>
   | ReturnType<typeof completion>
   | ReturnType<typeof definition>
-  | ReturnType<typeof diagnostic>;
+  | ReturnType<typeof diagnostic>
+  | ReturnType<typeof codeAction>;
 
 type NotificationMethod = (message: NotificationMessage) => void;
 
@@ -38,6 +40,7 @@ const methodLookup: Record<string, RequestMethod | NotificationMethod> = {
   "textDocument/didClose": didClose,
   "textDocument/didChange": didChange,
   "textDocument/diagnostic": diagnostic,
+  "textDocument/codeAction": codeAction,
 };
 
 const respond = (id: RequestMessage["id"], result: object | null) => {
