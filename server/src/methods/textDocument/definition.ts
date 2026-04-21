@@ -1,10 +1,9 @@
-import { documents, TextDocumentIdentifier } from "../../interfaces/documents";
+import {
+  documents,
+  TextDocumentPositionParams,
+} from "../../interfaces/documents";
 import { RequestMessage } from "../../server";
-import { Position, Location } from "../../interfaces/location";
-interface TextDocumentPositionParams {
-  textDocument: TextDocumentIdentifier;
-  position: Position;
-}
+import { Location } from "../../interfaces/location";
 
 interface DefinitionParams extends TextDocumentPositionParams {}
 

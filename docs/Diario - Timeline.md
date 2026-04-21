@@ -65,3 +65,7 @@ Implementación de Code diagnostics para semicolons en estructuras de control
 
 - Video de implementación de LSP ([Video](https://www.youtube.com/watch?v=t1nI8i-D4oM))
 - Implementación de Code action para inserción de semicolons faltantes en estructuras de control
+
+## 21/04/2026
+
+- Implementación de Renaming para variables y funciones

@@ -1,3 +1,5 @@
+import { Position, Range } from "./location";
+
 export type DocumentUri = string;
 type DocumentBody = string;
 
@@ -17,6 +19,19 @@ export interface TextDocumentItem extends TextDocumentIdentifier {
 
 export interface TextDocumentContentChangeEvent {
   text: string;
+}
+export interface TextDocumentPositionParams {
+  textDocument: TextDocumentIdentifier;
+  position: Position;
+}
+
+interface TextEdit {
+  range: Range;
+  newText: string;
+}
+
+export interface WorkspaceEdit {
+  changes: { [uri: DocumentUri]: TextEdit[] };
 }
 
 export const documents = new Map<DocumentUri, DocumentBody>();

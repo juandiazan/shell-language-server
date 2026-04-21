@@ -21,6 +21,7 @@ export const initialize = (message: RequestMessage): InitializeResult => {
         interFileDependencies: false,
         workspaceDiagnostics: false,
       },
+      renameProvider: true,
     },
     serverInfo: {
       name: "shell-language-server",

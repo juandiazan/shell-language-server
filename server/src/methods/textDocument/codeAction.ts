@@ -1,17 +1,11 @@
-import { TextDocumentIdentifier } from "../../interfaces/documents";
+import {
+  TextDocumentIdentifier,
+  WorkspaceEdit,
+} from "../../interfaces/documents";
 import { Range } from "../../interfaces/location";
 import { Diagnostic, DiagnosticType } from "../../interfaces/diagnostics";
 import { DocumentUri } from "../../interfaces/documents";
 import { RequestMessage } from "../../server";
-
-interface TextEdit {
-  range: Range;
-  newText: string;
-}
-
-interface WorkspaceEdit {
-  changes: { [uri: DocumentUri]: TextEdit[] };
-}
 
 type CodeActionKind = "quickfix";
 namespace CodeActionKind {
