@@ -24,20 +24,24 @@ Lectura de artículo de [thedeveloperspace.com](https://thedeveloperspace.com/vs
 
 Tercera reunión
 
+## 31/03/26
+
+Semana de turismo
+
 ## 02/04/26
 
 - Lectura de [documentación de LSP de Microsoft](https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/)
 - Lectura de [implementación de un LSP en VS Code](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide)
 
-Resumen de los artículos: [[LSP - Documentacion]]
-
 ## 06/04/26
 
 - Lectura de paper [The Specification Language Server Protocol: A Proposal for Standardised LSP Extensions](https://arxiv.org/pdf/2108.02961)
-
 - Lectura de paper [[Language Server Protocol An Introduction to the Protocol, its Use, and Adoption for Web Modeling Tools.pdf]]
-
 - Lectura de paper [Decoupling Language and Editor - The Impact of the Language Server Protocol on Textual Domain-Specific Languages](https://pdfs.semanticscholar.org/8526/1fa85335a396934ddf20277fb85fc3bd309d.pdf)
+
+## 07/04/26
+
+Cuarta reunión
 
 ## 11/04/26
 
@@ -51,6 +55,10 @@ Video visto de implementación de LSP ([Video](www.youtube.com/watch?v=p0Vlz66AF
 
 - Video de día anterior terminado y filtrado de símbolos para completar implementado.
 - Implementación de Go-To Definition para funciones.
+
+## 14/04/26
+
+Quinta reunión
 
 ## 15/04/2026
 
@@ -68,4 +76,5 @@ Implementación de Code diagnostics para semicolons en estructuras de control
 
 ## 21/04/2026
 
-- Implementación de Renaming para variables y funciones
+- Implementación de Renaming para variables, funciones y otros símbolos
+- Sexta reunión
