@@ -1,7 +1,13 @@
 import { RequestMessage } from "../../server";
 import { documents, TextDocumentIdentifier } from "../../interfaces/documents";
+import {
+  CompletionItem,
+  CompletionItemKind,
+  CompletionList,
+  InsertTextFormat,
+} from "../../interfaces/completion";
+import { Position } from "../../interfaces/location";
 import * as fs from "fs";
-import log from "../../log";
 
 const MAX_LENGTH = 1000;
 
@@ -12,26 +18,12 @@ const words = fs
   .toString()
   .split("\n");
 
-type CompletionItem = {
-  label: string;
-};
-
-interface CompletionList {
-  isIncomplete: boolean;
-  items: CompletionItem[];
-}
-
-interface Position {
-  line: number;
-  character: number;
-}
-
 interface TextDocumentPositionParams {
   textDocument: TextDocumentIdentifier;
   position: Position;
 }
 
-export interface CompletionParams extends TextDocumentPositionParams {}
+export interface CompletionParams extends TextDocumentPositionParams { }
 
 export const completion = (message: RequestMessage): CompletionList | null => {
   const params = message.params as CompletionParams;
@@ -42,6 +34,10 @@ export const completion = (message: RequestMessage): CompletionList | null => {
   }
 
   const currentLine = content?.split("\n")[params.position.line];
+  if (currentLine === undefined) {
+    return null;
+  }
+
   const lineUntilCursor = currentLine.slice(0, params.position.character);
   const currentPrefix = lineUntilCursor.replace(/.*\W(.*?)/, "$1");
 
@@ -51,19 +47,79 @@ export const completion = (message: RequestMessage): CompletionList | null => {
     })
     .slice(0, MAX_LENGTH)
     .map((word: string) => {
-      return { label: word };
+      return buildCompletion(word);
     });
-
-  log.write({
-    completion: {
-      currentLine,
-      lineUntilCursor,
-      currentWord: currentPrefix,
-    },
-  });
 
   return {
     isIncomplete: items.length === MAX_LENGTH,
     items,
   };
 };
+
+const buildCompletion = (word: string): CompletionItem => {
+  switch (word) {
+    case "if":
+      return {
+        label: word,
+        kind: CompletionItemKind.Snippet,
+        detail: "if statement snippet",
+        insertTextFormat: InsertTextFormat.Snippet,
+        insertText:
+          "if [[ ${1:condition} ]]; then\n"
+          + "\t$0\n"
+          + "fi",
+      };
+    case "while":
+      return {
+        label: word,
+        kind: CompletionItemKind.Snippet,
+        detail: "while loop snippet",
+        insertTextFormat: InsertTextFormat.Snippet,
+        insertText:
+          "while [ ${1:condition} ]; do\n"
+          + "\t$0\n"
+          + "done",
+      };
+    case "for":
+      return {
+        label: word,
+        kind: CompletionItemKind.Snippet,
+        detail: "for loop snippet",
+        insertTextFormat: InsertTextFormat.Snippet,
+        insertText:
+          "for $${1:elem} in $${2:list}; do\n"
+          + "\t$0\n"
+          + "done",
+      };
+    case "case":
+      return {
+        label: word,
+        kind: CompletionItemKind.Snippet,
+        detail: "case statement snippet",
+        insertTextFormat: InsertTextFormat.Snippet,
+        insertText:
+          "case $${1:var} in\n"
+          + "\t${2:value})\n"
+          + "\t\t$0\n"
+          + "\t\t;;\n"
+          + "\t*)\n"
+          + "\t\t;;\n"
+          + "esac",
+      };
+    case "ifelse":
+      return {
+        label: word,
+        kind: CompletionItemKind.Snippet,
+        detail: "if-then-else statement snippet",
+        insertTextFormat: InsertTextFormat.Snippet,
+        insertText:
+          "if [[ ${1:condition} ]]; then\n"
+          + "\t$0\n"
+          + "else\n"
+          + "\t\n"
+          + "fi",
+      };
+    default:
+      return { label: word };
+  }
+}

@@ -17,6 +17,7 @@ fdisk
 grep
 help
 if
+ifelse
 in
 kill
 ls
