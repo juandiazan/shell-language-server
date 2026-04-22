@@ -1,42 +1,64 @@
-# Minimum Viable VS Code Language Server Extension
+# VS Code Language Server extension implementation guide
 
-NOTE: This is heavily based on [lsp-sample from vscode-extension-samples][sample] with the goal of removing example-specific code to ease starting a new Language Server.
-
-This project aims to provide a starting point for developing a self-contained Language Server Extension for VS Code using TypeScript.
+This README aims to provide a step-by-step guide for developing a self-contained Language Server Extension for VS Code using TypeScript, and adding new features to an existing one.
 
 "Self-contained" in this context means that this extension bundles its own language server code rather than wrapping an existing language server executable.
 
-As an MVP, this omits
-
-- linting
-- testing
-- behavior in the language server itself (besides connecting and listening to document changes)
+If starting from scratch, see [Getting started](#getting-started). If you want to add a feature to this language server instead go to [Implementing new features](#implementing-new-features).
 
 ## Getting Started
 
-1. Clone this repo
-2. Replace items in `package.json` marked `REPLACE_ME` with text related to your extension
-3. Do the same for `client/package.json` and `server/package.json`
-4. Do the same in `client/src/extension.ts`
-5. Run `npm install` from the repo root.
+1. Clone the repo this project is based on: [minimum-viable-vscode-language-server-extension](https://github.com/semanticart/minimum-viable-vscode-language-server-extension)
 
-To make it easy to get started, this language server will run on _every_ file type by default. To target specific languages, change
+2. Replace items in `package.json` marked `REPLACE_ME` with text related to the extension
+    - Name
+    - Description
+    - Author
+    - Publisher
+3. Do the same for `client/package.json`
+    - Name
+    - Descripton
+    - Author
+    - Publisher
+    - Github repo link
 
-`package.json`'s `activationEvents` to something like
+4. Do the same for `server/package.json`
+    - Name
+    - Descripton
+    - Author
+    - Github repo link
 
-```
+5. Do the same in `client/src/extension.ts`
+    - language-server-id
+    - language-server name
+
+6. **OPTIONAL**: Remove dependencies in `server/package.json` and leave `server.ts` empty if you want to develop it from scratch, without VS Code types (recommended)
+
+7. Run `npm install` from the repo root.
+
+To make it easy to get started, the language server will run on *every* file type by default. To target specific languages, change
+
+`package.json`'s `activationEvents` from
+
+```json
 "activationEvents": [
-  "onLanguage:plaintext"
+  "onLanguage"
+],
+```
+
+to something like
+
+```json
+"activationEvents": [
+  "onLanguage: <your-language>"
 ],
 ```
 
 And change the `documentSelector` in `client/src/extension.ts` to replace the `*` (e.g.)
 
+```typescript
+documentSelector: [{ scheme: "file", language: "<your-language>" }],
 ```
-documentSelector: [{ scheme: "file", language: "plaintext" }],
-```
-
-## Developing your extension
 
 To help verify everything is working properly, we've included the following code in `server.ts` after the `onInitialize` function:
 
@@ -52,23 +74,19 @@ From the root directory of this project, run `code .` Then in VS Code
 
 1. Build the extension (both client and server) with `⌘+shift+B` (or `ctrl+shift+B` on windows)
 2. Open the Run and Debug view and press "Launch Client" (or press `F5`). This will open a `[Extension Development Host]` VS Code window.
-3. Opening or editing a file in that window should show an information message in VS Code like you see below.
+3. Opening or editing a file of the chosen language in that window should show an information message in VS Code like you see below.
 
    ![example information message](https://semanticart.com/misc-images/minimum-viable-vscode-language-server-extension-info-message.png)
 
 4. Edits made to your `server.ts` will be rebuilt immediately but you'll need to "Launch Client" again (`⌘-shift-F5`) from the primary VS Code window to see the impact of your changes.
 
-[Debugging instructions can be found here][debug]
+## Implementing new features
 
-## Distributing your extension
-
-Read the full [Publishing Extensions doc][publish] for the full details.
-
-Note that you can package and distribute a standalone `.vsix` file without publishing it to the marketplace by following [these instructions][vsix].
+// TODO
 
 ## Anatomy
 
-```
+```json
 .
 ├── .vscode
 │   ├── launch.json         // Tells VS Code how to launch our extension
@@ -92,7 +110,12 @@ Note that you can package and distribute a standalone `.vsix` file without publi
 └── tsconfig.json           // Top-level TypeScript config
 ```
 
-[debug]: https://code.visualstudio.com/api/language-extensions/language-server-extension-guide#debugging-both-client-and-server
-[sample]: https://github.com/microsoft/vscode-extension-samples/tree/main/lsp-sample
-[publish]: https://code.visualstudio.com/api/working-with-extensions/publishing-extension
-[vsix]: https://code.visualstudio.com/api/working-with-extensions/publishing-extension#packaging-extensions
+## Information of interest
+
+- [Debugging your extension](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide#debugging-both-client-and-server)
+
+- [LSP Sample](https://github.com/microsoft/vscode-extension-samples/tree/main/lsp-sample)
+
+- [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
+
+- [Package and distribute without publishing with a .vsix file](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#packaging-extensions)
