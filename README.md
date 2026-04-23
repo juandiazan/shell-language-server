@@ -80,9 +80,13 @@ From the root directory of this project, run `code .` Then in VS Code
 
 4. Edits made to your `server.ts` will be rebuilt immediately but you'll need to "Launch Client" again (`⌘-shift-F5`) from the primary VS Code window to see the impact of your changes.
 
-## Implementing new features
+## Implementing new features to this project
 
-// TODO
+1. Add the capability corresponding to the language feature to `server/src/methods/initialize.ts`. Both the name and value of the capability related to the implemented language feature can be found in the official LSP docs inside the *specification* section (see [information of interest below](##useful-links))
+2. Add method name and implementation to the `methodLookup` record located in `server/src/server.ts`
+3. Create a file inside `methods/` named after the implemented method
+4. Add the newly created method to the `RequestMethod` return type
+5. Create necessary interfaces inside the new file (or inside `interfaces/`) and implement the method used on step 2. The interfaces can be extracted from the official LSP docs.
 
 ## Anatomy
 
@@ -111,6 +115,8 @@ From the root directory of this project, run `code .` Then in VS Code
 ```
 
 ## Information of interest
+
+- [LSP Docs](https://microsoft.github.io/language-server-protocol/)
 
 - [Debugging your extension](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide#debugging-both-client-and-server)
 
