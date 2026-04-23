@@ -78,3 +78,11 @@ Implementación de Code diagnostics para semicolons en estructuras de control
 
 - Implementación de Renaming para variables, funciones y otros símbolos
 - Sexta reunión
+
+## 22/04/2026
+
+Inicio de escritura de README
+
+## 23/04/2026
+
+Pasos de implementación de nuevas language features en README
