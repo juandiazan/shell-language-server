@@ -8,7 +8,17 @@ This repo is a TypeScript VS Code extension with an embedded shell language serv
 
 - **Client** (`client/src/extension.ts`) starts the server via stdio.
 - **Server** (`server/src/server.ts`) parses JSON-RPC/LSP messages and dispatches handlers.
-- The current LSP surface is minimal (`initialize`, `textDocument/didChange`, `textDocument/completion`).
+- Current request handlers:
+  - `initialize`
+  - `textDocument/completion`
+  - `textDocument/definition`
+  - `textDocument/diagnostic`
+  - `textDocument/codeAction`
+  - `textDocument/rename`
+- Current notification handlers:
+  - `textDocument/didOpen`
+  - `textDocument/didChange`
+  - `textDocument/didClose`
 
 ## Repository layout
 
@@ -38,9 +48,11 @@ There is currently no dedicated lint/test script in this repo.
 
 - Add new LSP handlers under `server/src/methods/...`.
 - Register every new handler in `methodLookup` in `server/src/server.ts`.
+- If a new feature is client-visible, also advertise it in `initialize` capabilities (`server/src/methods/initialize.ts`).
 - Request handlers should return a result object (or `null` when appropriate).
 - Notification handlers should return `void`.
-- Document state is held in-memory in `documents` (`server/src/documents.ts`) and updated by `textDocument/didChange`.
+- Document state is held in-memory in `documents` (`server/src/interfaces/documents.ts`) and updated by open/change/close notifications.
+- `textDocument/codeAction` currently consumes diagnostics with `DiagnosticType.MissingSemicolon`; keep diagnostic data and quick-fix logic aligned when changing either side.
 
 ## Client-side guidance
 
