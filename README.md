@@ -82,7 +82,7 @@ From the root directory of this project, run `code .` Then in VS Code
 
 ## Implementing new features to this project
 
-1. Add the capability corresponding to the language feature to `server/src/methods/initialize.ts`. Both the name and value of the capability related to the implemented language feature can be found in the official LSP docs inside the *specification* section (see [information of interest below](##useful-links))
+1. Add the capability corresponding to the language feature to `server/src/methods/initialize.ts`. Both the name and value of the capability related to the implemented language feature can be found in the official LSP docs inside the *specification* section (see [information of interest below](#information-of-interest))
 2. Add method name and implementation to the `methodLookup` record located in `server/src/server.ts`
 3. Create a file inside `methods/` named after the implemented method
 4. Add the newly created method to the `RequestMethod` return type
