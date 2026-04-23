@@ -17,7 +17,32 @@ export namespace InsertTextFormat {
   export const Snippet = 2;
 }
 
-export type CompletionItemKind = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25;
+export type CompletionItemKind =
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13
+  | 14
+  | 15
+  | 16
+  | 17
+  | 18
+  | 19
+  | 20
+  | 21
+  | 22
+  | 23
+  | 24
+  | 25;
 export namespace CompletionItemKind {
   export const Text = 1;
   export const Method = 2;
@@ -45,3 +70,32 @@ export namespace CompletionItemKind {
   export const Operator = 24;
   export const TypeParameter = 25;
 }
+
+type Word = string;
+type Completion = string;
+type CompletionDescription = string;
+
+export const CompletionKeywords: Record<Word, Completion> = {
+  if: "if [[ ${1:condition} ]]; then\n \t$0\n fi",
+  ifelse: "if [[ ${1:condition} ]]; then\n \t$0\n else\n \t\n fi",
+  while: "while [ ${1:condition} ]; do\n \t$0\n done",
+  for: "for $${1:elem} in $${2:list}; do\n \t$0\n done",
+  case:
+    "case $${1:var} in\n" +
+    "\t${2:value})\n" +
+    "\t\t$0\n" +
+    "\t\t;;\n" +
+    "\t*)\n" +
+    "\t\t;;\n" +
+    "esac",
+  function: "function ${1:name}()\n{\n$0}",
+};
+
+export const CompletionDetail: Record<Word, CompletionDescription> = {
+  if: "if statement snippet",
+  ifelse: "if-then-else statement snippet",
+  while: "while loop snippet",
+  for: "for loop snippet",
+  case: "case statement snippet",
+  function: "empty function body",
+};

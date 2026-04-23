@@ -5,6 +5,8 @@ import {
   CompletionItemKind,
   CompletionList,
   InsertTextFormat,
+  CompletionKeywords,
+  CompletionDetail,
 } from "../../interfaces/completion";
 import { Position } from "../../interfaces/location";
 import * as fs from "fs";
@@ -23,7 +25,7 @@ interface TextDocumentPositionParams {
   position: Position;
 }
 
-export interface CompletionParams extends TextDocumentPositionParams { }
+export interface CompletionParams extends TextDocumentPositionParams {}
 
 export const completion = (message: RequestMessage): CompletionList | null => {
   const params = message.params as CompletionParams;
@@ -57,69 +59,15 @@ export const completion = (message: RequestMessage): CompletionList | null => {
 };
 
 const buildCompletion = (word: string): CompletionItem => {
-  switch (word) {
-    case "if":
-      return {
-        label: word,
-        kind: CompletionItemKind.Snippet,
-        detail: "if statement snippet",
-        insertTextFormat: InsertTextFormat.Snippet,
-        insertText:
-          "if [[ ${1:condition} ]]; then\n"
-          + "\t$0\n"
-          + "fi",
-      };
-    case "while":
-      return {
-        label: word,
-        kind: CompletionItemKind.Snippet,
-        detail: "while loop snippet",
-        insertTextFormat: InsertTextFormat.Snippet,
-        insertText:
-          "while [ ${1:condition} ]; do\n"
-          + "\t$0\n"
-          + "done",
-      };
-    case "for":
-      return {
-        label: word,
-        kind: CompletionItemKind.Snippet,
-        detail: "for loop snippet",
-        insertTextFormat: InsertTextFormat.Snippet,
-        insertText:
-          "for $${1:elem} in $${2:list}; do\n"
-          + "\t$0\n"
-          + "done",
-      };
-    case "case":
-      return {
-        label: word,
-        kind: CompletionItemKind.Snippet,
-        detail: "case statement snippet",
-        insertTextFormat: InsertTextFormat.Snippet,
-        insertText:
-          "case $${1:var} in\n"
-          + "\t${2:value})\n"
-          + "\t\t$0\n"
-          + "\t\t;;\n"
-          + "\t*)\n"
-          + "\t\t;;\n"
-          + "esac",
-      };
-    case "ifelse":
-      return {
-        label: word,
-        kind: CompletionItemKind.Snippet,
-        detail: "if-then-else statement snippet",
-        insertTextFormat: InsertTextFormat.Snippet,
-        insertText:
-          "if [[ ${1:condition} ]]; then\n"
-          + "\t$0\n"
-          + "else\n"
-          + "\t\n"
-          + "fi",
-      };
-    default:
-      return { label: word };
+  if (!CompletionKeywords[word]) {
+    return { label: word };
   }
-}
+
+  return {
+    label: word,
+    kind: CompletionItemKind.Snippet,
+    detail: CompletionDetail[word],
+    insertTextFormat: InsertTextFormat.Snippet,
+    insertText: CompletionKeywords[word],
+  };
+};
