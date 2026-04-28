@@ -85,4 +85,9 @@ Inicio de escritura de README
 
 ## 23/04/2026
 
-Pasos de implementación de nuevas language features en README
+- Pasos de implementación de nuevas language features en README
+- Autocomplete de cuerpo de función y refactors en Completion
+
+## 28/04/2026
+
+Séptima reunión
