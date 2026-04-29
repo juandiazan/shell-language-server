@@ -91,3 +91,7 @@ Inicio de escritura de README
 ## 28/04/2026
 
 Séptima reunión
+
+## 29/04/2026
+
+Autocomplete de cuerpo de Select statement en Completion

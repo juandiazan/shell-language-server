@@ -28,5 +28,6 @@ pwd
 read
 sed
 source
+select
 tar
 while

@@ -89,6 +89,7 @@ export const CompletionKeywords: Record<Word, Completion> = {
     "\t\t;;\n" +
     "esac",
   function: "function ${1:name}()\n{\n$0}",
+  select: "select ${1:var} in ${2:list};\ndo\n\t\ndone",
 };
 
 export const CompletionDetail: Record<Word, CompletionDescription> = {
@@ -98,4 +99,5 @@ export const CompletionDetail: Record<Word, CompletionDescription> = {
   for: "for loop snippet",
   case: "case statement snippet",
   function: "empty function body",
+  select: "select snippet for menu creation",
 };
