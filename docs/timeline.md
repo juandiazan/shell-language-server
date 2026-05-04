@@ -95,3 +95,11 @@ Séptima reunión
 ## 29/04/2026
 
 Autocomplete de cuerpo de Select statement en Completion
+
+## 03/04/2026
+
+Avances en documento principal
+
+## 04/04/2026
+
+Avances en documento principal
