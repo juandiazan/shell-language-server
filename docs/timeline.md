@@ -96,10 +96,26 @@ Séptima reunión
 
 Autocomplete de cuerpo de Select statement en Completion
 
-## 03/04/2026
+## 03/05/2026
 
-Avances en documento principal
+Avances en documento formal para primera entrega
 
-## 04/04/2026
+## 04/05/2026
 
-Avances en documento principal
+Avances en documento formal para primera entrega
+
+## 05/05/2026
+
+Octava reunión
+
+## 07/05/2026
+
+Finalización de documento formal para primera entrega
+
+## 12/05/2026
+
+Novena reunión
+
+## 13/05/2026
+
+Primera entrega

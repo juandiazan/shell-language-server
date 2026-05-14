@@ -22,6 +22,7 @@ export const initialize = (message: RequestMessage): InitializeResult => {
         workspaceDiagnostics: false,
       },
       renameProvider: true,
+      hoverProvider: {},
     },
     serverInfo: {
       name: "shell-language-server",
