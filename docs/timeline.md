@@ -119,3 +119,7 @@ Novena reunión
 ## 13/05/2026
 
 Primera entrega
+
+## 14/05/2026
+
+Implementación de información de comando on-hover
