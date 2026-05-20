@@ -123,3 +123,11 @@ Primera entrega
 ## 14/05/2026
 
 Implementación de información de comando on-hover
+
+## 19/05/2026
+
+Décima reunión
+
+## 20/05/2026
+
+Implementación de LSP para Neovim y pequeña guía de como hacerlo funcionar.
