@@ -131,3 +131,7 @@ Décima reunión
 ## 20/05/2026
 
 Implementación de LSP para Neovim y pequeña guía de como hacerlo funcionar.
+
+## 27/05/2026
+
+GitHub Actions de Formatting, Linting y Build y refactors varios
