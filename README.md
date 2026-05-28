@@ -1,5 +1,8 @@
 # VS Code Language Server extension implementation guide
 
+[![Lint & Format](https://github.com/juandiazan/shell-language-server/actions/workflows/lint.yml/badge.svg)](https://github.com/juandiazan/shell-language-server/actions/workflows/lint.yml)
+[![Build](https://github.com/juandiazan/shell-language-server/actions/workflows/build.yml/badge.svg)](https://github.com/juandiazan/shell-language-server/actions/workflows/build.yml)
+
 This README aims to provide a step-by-step guide for developing a self-contained Language Server Extension for VS Code using TypeScript, and adding new features to an existing one.
 
 "Self-contained" in this context means that this extension bundles its own language server code rather than wrapping an existing language server executable.
@@ -35,6 +38,18 @@ If starting from scratch, see [Getting started](#getting-started). If you want t
 6. **OPTIONAL**: Remove dependencies in `server/package.json` and leave `server.ts` empty if you want to develop it from scratch, without VS Code types (recommended)
 
 7. Run `npm install` from the repo root.
+
+## Scripts
+
+Run these from the repo root with `pnpm <script>`:
+
+| Script | Description |
+|---|---|
+| `compile` | Compile TypeScript for client + server |
+| `watch` | Rebuild on save |
+| `lint` | Run ESLint on all TypeScript source files |
+| `format` | Auto-format all TypeScript source files with Prettier |
+| `format:check` | Check formatting without writing changes (used in CI) |
 
 To make it easy to get started, the language server will run on *every* file type by default. To target specific languages, change
 
