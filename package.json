@@ -20,10 +20,18 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -b",
     "watch": "tsc -b -w",
-    "postinstall": "cd client && npm install && cd ../server && npm install && cd .."
+    "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+    "lint": "eslint 'client/src/**/*.ts' 'server/src/**/*.ts'",
+    "format": "prettier --write 'client/src/**/*.ts' 'server/src/**/*.ts'",
+    "format:check": "prettier --check 'client/src/**/*.ts' 'server/src/**/*.ts'"
   },
   "devDependencies": {
     "@types/node": "^20.5.7",
+    "@typescript-eslint/eslint-plugin": "^8.60.0",
+    "@typescript-eslint/parser": "^8.60.0",
+    "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.3",
     "typescript": "^5.2.2"
   }
 }
