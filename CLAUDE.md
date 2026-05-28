@@ -1,0 +1,70 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project overview
+
+A TypeScript VS Code extension with an embedded shell language server. The server speaks the Language Server Protocol (LSP) over stdio using raw JSON-RPC — no `vscode-languageserver` library. There is also a Neovim client under `nvim-client/`.
+
+## Build commands
+
+```bash
+# Install all dependencies (also runs client and server installs via postinstall)
+npm install
+
+# Compile TypeScript for client + server
+npm run compile
+
+# Watch mode (rebuilds on save)
+npm run watch
+```
+
+There is no lint or test script. After any code change, run `npm run compile` to verify it builds.
+
+## Running the extension
+
+**VS Code**: Open the repo in VS Code, then press `F5` (Launch Client). This opens an Extension Development Host window where the server runs against `.sh` files.
+
+**Neovim**: See `nvim-client/README.md`. The compiled server entry point is `server/out/server.js`.
+
+## Architecture
+
+```
+client/src/extension.ts     — VS Code extension host; spawns server.js via stdio
+server/src/server.ts        — JSON-RPC framing loop; dispatches to methodLookup
+server/src/methods/
+  initialize.ts             — advertises all server capabilities
+  textDocument/
+    completion.ts           — prefix-matched word list + snippet keywords
+    definition.ts           — go-to-definition
+    hover.ts                — runs `man <word>` and returns the output
+    rename.ts               — workspace rename
+    codeAction.ts           — quick-fix for MissingSemicolon diagnostics
+    diagnostic/
+      diagnostic.ts         — entry point; merges all diagnostic sources
+      bracketDiagnostics.ts — unmatched bracket detection
+      structureSemicolonDiagnostics.ts — missing semicolons in if/for/while
+server/src/interfaces/
+  documents.ts              — in-memory document store (Map<uri, text>)
+  completion.ts             — CompletionItem types, snippet keywords, detail strings
+  diagnostics.ts            — Diagnostic types and DiagnosticType enum
+  location.ts               — Position, Range types
+server/src/log.ts           — appends to lsp.log
+server/src/exampleWords.txt — word list loaded at startup for completion
+```
+
+**Request vs notification flow**: `server.ts` reads from `process.stdin`, parses `Content-Length` framed messages, looks up the handler in `methodLookup`, and writes the response to `process.stdout` only for request messages (those with an `id`). Notification handlers return `void` and receive no response.
+
+**Document state**: All open documents are kept in the `documents` Map exported from `interfaces/documents.ts`. `didOpen`/`didChange`/`didClose` handlers mutate it; all feature handlers read from it.
+
+## Adding a new LSP feature
+
+1. Advertise the capability in `server/src/methods/initialize.ts`.
+2. Create `server/src/methods/textDocument/<feature>.ts`; export a function matching the signature expected by `RequestMethod` or `NotificationMethod`.
+3. Register it in `methodLookup` in `server/src/server.ts`.
+4. Add the return type to the `RequestMethod` union in `server.ts`.
+
+## Known caveats
+
+- `lsp.log` is append-only and grows unbounded; safe to delete between sessions.
+- `hover.ts` calls `execSync('man <command>')` synchronously on the LSP request thread.
