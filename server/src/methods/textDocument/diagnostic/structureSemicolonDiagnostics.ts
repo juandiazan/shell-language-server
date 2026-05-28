@@ -1,9 +1,5 @@
 import { Range } from "../../../interfaces/location";
-import {
-  Diagnostic,
-  DiagnosticSeverity,
-  DiagnosticType,
-} from "../../../interfaces/diagnostics";
+import { Diagnostic, DiagnosticSeverity, DiagnosticType } from "../../../interfaces/diagnostics";
 
 interface PendingStructureSemicolonCheck {
   expectedKeyword: "then" | "do" | null;
@@ -28,11 +24,7 @@ interface CurrentWordState {
  * @param length Word length.
  * @returns LSP range covering the full word.
  */
-const wordRange = (
-  line: number,
-  startCharacter: number,
-  length: number,
-): Range => ({
+const wordRange = (line: number, startCharacter: number, length: number): Range => ({
   start: { line, character: startCharacter },
   end: { line, character: startCharacter + length },
 });
@@ -44,9 +36,7 @@ const wordRange = (
  * @param content Full document text.
  * @returns Diagnostic list for detected structure semicolon issues.
  */
-export const structureSemicolonDiagnostics = (
-  content: string,
-): Diagnostic[] => {
+export const structureSemicolonDiagnostics = (content: string): Diagnostic[] => {
   const diagnostics: Diagnostic[] = [];
   const lines = content.split("\n");
   const quoteState: QuoteState = {
@@ -65,7 +55,7 @@ export const structureSemicolonDiagnostics = (
       lineNumber,
       quoteState,
       pendingCheck,
-      diagnostics,
+      diagnostics
     );
   }
 
@@ -86,7 +76,7 @@ const processLineForStructureSemicolonDiagnostics = (
   lineNumber: number,
   quoteState: QuoteState,
   pendingCheck: PendingStructureSemicolonCheck,
-  diagnostics: Diagnostic[],
+  diagnostics: Diagnostic[]
 ): void => {
   const currentWord: CurrentWordState = {
     value: "",
@@ -162,14 +152,14 @@ const flushCurrentWord = (
   currentWord: CurrentWordState,
   lineNumber: number,
   pendingCheck: PendingStructureSemicolonCheck,
-  diagnostics: Diagnostic[],
+  diagnostics: Diagnostic[]
 ): void => {
   processWordForStructureSemicolonDiagnostics(
     currentWord.value,
     lineNumber,
     currentWord.startCharacter,
     pendingCheck,
-    diagnostics,
+    diagnostics
   );
   resetCurrentWord(currentWord);
 };
@@ -188,7 +178,7 @@ const processWordForStructureSemicolonDiagnostics = (
   lineNumber: number,
   wordStartCharacter: number,
   pendingCheck: PendingStructureSemicolonCheck,
-  diagnostics: Diagnostic[],
+  diagnostics: Diagnostic[]
 ): void => {
   if (!word.length) {
     return;
@@ -201,9 +191,7 @@ const processWordForStructureSemicolonDiagnostics = (
 
   if (word === pendingCheck.expectedKeyword) {
     if (!pendingCheck.lastSignificantTokenSemicolon) {
-      diagnostics.push(
-        buildMissingSemicolonDiagnostic(word, lineNumber, wordStartCharacter),
-      );
+      diagnostics.push(buildMissingSemicolonDiagnostic(word, lineNumber, wordStartCharacter));
     }
 
     pendingCheck.expectedKeyword = null;
@@ -222,7 +210,7 @@ const processWordForStructureSemicolonDiagnostics = (
  */
 const updatePendingCheckForStarterKeyword = (
   word: string,
-  pendingCheck: PendingStructureSemicolonCheck,
+  pendingCheck: PendingStructureSemicolonCheck
 ): void => {
   if (word === "if") {
     pendingCheck.expectedKeyword = "then";
@@ -246,7 +234,7 @@ const updatePendingCheckForStarterKeyword = (
 const buildMissingSemicolonDiagnostic = (
   word: string,
   lineNumber: number,
-  wordStartCharacter: number,
+  wordStartCharacter: number
 ): Diagnostic => {
   return {
     severity: DiagnosticSeverity.Error,
@@ -323,7 +311,7 @@ const isWordCharacter = (char: string): boolean => /[A-Za-z0-9_]/.test(char);
 const appendWordCharacter = (
   currentWord: CurrentWordState,
   char: string,
-  characterIndex: number,
+  characterIndex: number
 ): void => {
   if (!currentWord.value.length) {
     currentWord.startCharacter = characterIndex;
@@ -340,7 +328,7 @@ const appendWordCharacter = (
  */
 const markSemicolonWhenPending = (
   char: string,
-  pendingCheck: PendingStructureSemicolonCheck,
+  pendingCheck: PendingStructureSemicolonCheck
 ): void => {
   if (pendingCheck.expectedKeyword && char === ";") {
     pendingCheck.lastSignificantTokenSemicolon = true;

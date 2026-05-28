@@ -1,7 +1,4 @@
-import {
-  TextDocumentIdentifier,
-  WorkspaceEdit,
-} from "../../interfaces/documents";
+import { TextDocumentIdentifier, WorkspaceEdit } from "../../interfaces/documents";
 import { Range } from "../../interfaces/location";
 import { Diagnostic, DiagnosticType } from "../../interfaces/diagnostics";
 import { DocumentUri } from "../../interfaces/documents";
@@ -35,13 +32,11 @@ export const codeAction = (message: RequestMessage): CodeAction[] | null => {
   const diagnostics = params.context.diagnostics;
 
   const missingSemicolonDiagnostics = diagnostics.filter(
-    (diagnostic) => diagnostic.data.type === DiagnosticType.MissingSemicolon,
+    (diagnostic) => diagnostic.data.type === DiagnosticType.MissingSemicolon
   );
-  const missingSemicolonActions = missingSemicolonDiagnostics.map(
-    (diagnostic) => {
-      return buildInsertSemicolonCodeAction(diagnostic, documentUri);
-    },
-  );
+  const missingSemicolonActions = missingSemicolonDiagnostics.map((diagnostic) => {
+    return buildInsertSemicolonCodeAction(diagnostic, documentUri);
+  });
 
   // in the future more code actions could be added here
   const actions = [...missingSemicolonActions];
@@ -55,7 +50,7 @@ export const codeAction = (message: RequestMessage): CodeAction[] | null => {
 
 const buildInsertSemicolonCodeAction = (
   missingSemicolonDiagnostic: Diagnostic,
-  documentUri: DocumentUri,
+  documentUri: DocumentUri
 ): CodeAction => {
   const insertRange: Range = {
     start: missingSemicolonDiagnostic.range.start,

@@ -6,8 +6,8 @@ import { execSync } from "child_process";
 
 type MarkupKind = "plaintext" | "markdown";
 namespace MarkupKind {
-  export const PlainText: "plaintext" = "plaintext";
-  export const Markdown: "markdown" = "markdown";
+  export const PlainText = "plaintext" as const;
+  export const Markdown = "markdown" as const;
 }
 
 interface MarkupContent {
@@ -20,7 +20,7 @@ interface Hover {
   range?: Range;
 }
 
-interface HoverParams extends TextDocumentPositionParams {}
+type HoverParams = TextDocumentPositionParams;
 
 /**
  * Returns whether a character can be part of a shell symbol token.

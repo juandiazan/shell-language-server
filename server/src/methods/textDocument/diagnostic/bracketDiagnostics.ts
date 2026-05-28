@@ -1,9 +1,5 @@
 import { Range } from "../../../interfaces/location";
-import {
-  Diagnostic,
-  DiagnosticSeverity,
-  DiagnosticType,
-} from "../../../interfaces/diagnostics";
+import { Diagnostic, DiagnosticSeverity, DiagnosticType } from "../../../interfaces/diagnostics";
 
 type OpeningBracket = "(" | "[" | "{";
 type ClosingBracket = ")" | "]" | "}";
@@ -66,7 +62,7 @@ export const bracketDiagnostics = (content: string): Diagnostic[] => {
       lineNumber,
       parserState,
       bracketStack,
-      diagnostics,
+      diagnostics
     );
   }
 
@@ -89,7 +85,7 @@ const processLineForBracketDiagnostics = (
   lineNumber: number,
   parserState: ParserState,
   bracketStack: BracketToken[],
-  diagnostics: Diagnostic[],
+  diagnostics: Diagnostic[]
 ): void => {
   let currentWord = "";
 
@@ -149,12 +145,7 @@ const processLineForBracketDiagnostics = (
     }
 
     if (isOpeningBracket(currentChar)) {
-      pushOpeningBracket(
-        bracketStack,
-        currentChar as OpeningBracket,
-        lineNumber,
-        character,
-      );
+      pushOpeningBracket(bracketStack, currentChar as OpeningBracket, lineNumber, character);
       continue;
     }
 
@@ -164,7 +155,7 @@ const processLineForBracketDiagnostics = (
         currentChar as ClosingBracket,
         lineNumber,
         character,
-        diagnostics,
+        diagnostics
       );
     }
   }
@@ -188,10 +179,7 @@ const isCommentStart = (char: string, parserState: ParserState): boolean => {
  * @param word Parsed shell word.
  * @param parserState Mutable parser state.
  */
-const processWordForCaseState = (
-  word: string,
-  parserState: ParserState,
-): void => {
+const processWordForCaseState = (word: string, parserState: ParserState): void => {
   if (word === "case") {
     parserState.inCaseBlock = true;
     parserState.inCaseClauseBody = false;
@@ -210,10 +198,7 @@ const processWordForCaseState = (
  * @param char Character to inspect.
  * @param parserState Current parser state.
  */
-const isEscapedCharacter = (
-  char: string,
-  parserState: ParserState,
-): boolean => {
+const isEscapedCharacter = (char: string, parserState: ParserState): boolean => {
   return char === "\\" && !parserState.inSingleQuotes;
 };
 
@@ -223,10 +208,7 @@ const isEscapedCharacter = (
  * @param char Character to inspect.
  * @param parserState Current parser state.
  */
-const isSingleQuoteToggle = (
-  char: string,
-  parserState: ParserState,
-): boolean => {
+const isSingleQuoteToggle = (char: string, parserState: ParserState): boolean => {
   return char === "'" && !parserState.inDoubleQuotes;
 };
 
@@ -236,10 +218,7 @@ const isSingleQuoteToggle = (
  * @param char Character to inspect.
  * @param parserState Current parser state.
  */
-const isDoubleQuoteToggle = (
-  char: string,
-  parserState: ParserState,
-): boolean => {
+const isDoubleQuoteToggle = (char: string, parserState: ParserState): boolean => {
   return char === '"' && !parserState.inSingleQuotes;
 };
 
@@ -270,7 +249,7 @@ const isWordCharacter = (char: string): boolean => /[A-Za-z0-9_]/.test(char);
 const updateCurrentWord = (
   currentWord: string,
   currentChar: string,
-  parserState: ParserState,
+  parserState: ParserState
 ): string => {
   if (isWordCharacter(currentChar)) {
     return currentWord + currentChar;
@@ -286,15 +265,8 @@ const updateCurrentWord = (
  * @param currentChar Character to inspect.
  * @param parserState Current parser state.
  */
-const isEnteringCaseClause = (
-  currentChar: string,
-  parserState: ParserState,
-): boolean => {
-  return (
-    parserState.inCaseBlock &&
-    !parserState.inCaseClauseBody &&
-    currentChar === ")"
-  );
+const isEnteringCaseClause = (currentChar: string, parserState: ParserState): boolean => {
+  return parserState.inCaseBlock && !parserState.inCaseClauseBody && currentChar === ")";
 };
 
 /**
@@ -307,12 +279,10 @@ const isEnteringCaseClause = (
 const isLeavingCaseClause = (
   line: string,
   character: number,
-  parserState: ParserState,
+  parserState: ParserState
 ): boolean => {
   return (
-    parserState.inCaseBlock &&
-    parserState.inCaseClauseBody &&
-    line.startsWith(";;", character)
+    parserState.inCaseBlock && parserState.inCaseClauseBody && line.startsWith(";;", character)
   );
 };
 
@@ -324,7 +294,7 @@ const isLeavingCaseClause = (
  */
 const shouldIgnoreBracketInCaseHeader = (
   currentChar: string,
-  parserState: ParserState,
+  parserState: ParserState
 ): boolean => {
   return (
     parserState.inCaseBlock &&
@@ -354,7 +324,7 @@ const pushOpeningBracket = (
   bracketStack: BracketToken[],
   openingBracket: OpeningBracket,
   lineNumber: number,
-  character: number,
+  character: number
 ): void => {
   bracketStack.push({
     char: openingBracket,
@@ -386,10 +356,9 @@ const processClosingBracket = (
   closingBracket: ClosingBracket,
   lineNumber: number,
   character: number,
-  diagnostics: Diagnostic[],
+  diagnostics: Diagnostic[]
 ): void => {
-  const expectedMatchingOpeningBracket =
-    closingToOpeningBracket[closingBracket];
+  const expectedMatchingOpeningBracket = closingToOpeningBracket[closingBracket];
   const openingBracket = bracketStack.at(-1);
 
   if (!openingBracket) {
@@ -397,8 +366,8 @@ const processClosingBracket = (
       buildBracketDiagnostic(
         `Unmatched closing bracket "${closingBracket}".`,
         lineNumber,
-        character,
-      ),
+        character
+      )
     );
     return;
   }
@@ -411,8 +380,8 @@ const processClosingBracket = (
       buildBracketDiagnostic(
         `Mismatched closing bracket "${closingBracket}". Expected "${expectedMatchingClosingBracket}" to match "${openingBracket.char}".`,
         lineNumber,
-        character,
-      ),
+        character
+      )
     );
     return;
   }
@@ -428,7 +397,7 @@ const processClosingBracket = (
  */
 const emitUnmatchedOpeningBracketDiagnostics = (
   bracketStack: BracketToken[],
-  diagnostics: Diagnostic[],
+  diagnostics: Diagnostic[]
 ): void => {
   while (bracketStack.length > 0) {
     const openingBracket = bracketStack.pop() as BracketToken;
@@ -436,8 +405,8 @@ const emitUnmatchedOpeningBracketDiagnostics = (
       buildBracketDiagnostic(
         `Unmatched opening bracket "${openingBracket.char}".`,
         openingBracket.line,
-        openingBracket.character,
-      ),
+        openingBracket.character
+      )
     );
   }
 };
@@ -449,11 +418,7 @@ const emitUnmatchedOpeningBracketDiagnostics = (
  * @param line Zero-based line index.
  * @param character Zero-based character index.
  */
-const buildBracketDiagnostic = (
-  message: string,
-  line: number,
-  character: number,
-): Diagnostic => {
+const buildBracketDiagnostic = (message: string, line: number, character: number): Diagnostic => {
   return {
     severity: DiagnosticSeverity.Error,
     message,

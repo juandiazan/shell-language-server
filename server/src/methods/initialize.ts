@@ -10,7 +10,7 @@ interface InitializeResult {
   };
 }
 
-export const initialize = (message: RequestMessage): InitializeResult => {
+export const initialize = (_message: RequestMessage): InitializeResult => {
   return {
     capabilities: {
       completionProvider: { snippetSupport: true },

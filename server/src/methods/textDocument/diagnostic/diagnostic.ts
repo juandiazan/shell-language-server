@@ -15,9 +15,7 @@ import { structureSemicolonDiagnostics } from "./structureSemicolonDiagnostics";
  * @param message JSON-RPC request containing document diagnostic params.
  * @returns Full diagnostic report for the requested document.
  */
-export const diagnostic = (
-  message: RequestMessage,
-): FullDocumentDiagnosticReport | null => {
+export const diagnostic = (message: RequestMessage): FullDocumentDiagnosticReport | null => {
   const params = message.params as DocumentDiagnosticParams;
   const content = documents.get(params.textDocument.uri);
 
@@ -27,9 +25,6 @@ export const diagnostic = (
 
   return {
     kind: "full",
-    items: [
-      ...bracketDiagnostics(content),
-      ...structureSemicolonDiagnostics(content),
-    ],
+    items: [...bracketDiagnostics(content), ...structureSemicolonDiagnostics(content)],
   };
 };

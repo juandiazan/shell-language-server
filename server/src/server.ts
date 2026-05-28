@@ -24,7 +24,7 @@ export interface RequestMessage extends NotificationMessage {
 }
 
 type RequestMethod = (
-  message: RequestMessage,
+  message: RequestMessage
 ) =>
   | ReturnType<typeof initialize>
   | ReturnType<typeof completion>

@@ -1,16 +1,12 @@
-import {
-  documents,
-  TextDocumentPositionParams,
-} from "../../interfaces/documents";
+import { documents, TextDocumentPositionParams } from "../../interfaces/documents";
 import { RequestMessage } from "../../server";
 import { Location } from "../../interfaces/location";
 
-interface DefinitionParams extends TextDocumentPositionParams {}
+type DefinitionParams = TextDocumentPositionParams;
 
 const functionKeywordPattern =
   /^(\s*function\s+)([A-Za-z_][A-Za-z0-9_]*)\s*(?:\(\s*\))?\s*(?:\{|$)/;
-const nameParenthesisPattern =
-  /^(\s*)([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)\s*(?:\{|$)/;
+const nameParenthesisPattern = /^(\s*)([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)\s*(?:\{|$)/;
 
 /**
  * Returns whether a character can be part of a shell symbol token.
@@ -67,11 +63,7 @@ const wordAtPosition = (line: string, character: number): string | null => {
  * @param symbol Symbol to locate.
  * @returns Definition location or null if no match is found.
  */
-const findDefinitionInContent = (
-  uri: string,
-  content: string,
-  symbol: string,
-): Location | null => {
+const findDefinitionInContent = (uri: string, content: string, symbol: string): Location | null => {
   const lines = content.split("\n");
 
   for (let lineNumber = 0; lineNumber < lines.length; lineNumber += 1) {
@@ -152,7 +144,7 @@ export const definition = (message: RequestMessage): Location | null => {
   const currentDocumentDefinition = findDefinitionInContent(
     params.textDocument.uri,
     content,
-    symbol,
+    symbol
   );
 
   if (currentDocumentDefinition) {
@@ -165,11 +157,7 @@ export const definition = (message: RequestMessage): Location | null => {
       continue;
     }
 
-    const definitionInOpenDocument = findDefinitionInContent(
-      uri,
-      documentContent,
-      symbol,
-    );
+    const definitionInOpenDocument = findDefinitionInContent(uri, documentContent, symbol);
 
     if (definitionInOpenDocument) {
       return definitionInOpenDocument;

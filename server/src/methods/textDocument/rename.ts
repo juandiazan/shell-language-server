@@ -1,9 +1,5 @@
 import { RequestMessage } from "../../server";
-import {
-  documents,
-  TextDocumentPositionParams,
-  WorkspaceEdit,
-} from "../../interfaces/documents";
+import { documents, TextDocumentPositionParams, WorkspaceEdit } from "../../interfaces/documents";
 
 interface RenameParams extends TextDocumentPositionParams {
   newName: string;
@@ -56,11 +52,7 @@ const wordAtPosition = (line: string, character: number): string | null => {
 /**
  * Creates rename edits for every full-symbol occurrence in the target document.
  */
-const createEditsForSymbol = (
-  uri: string,
-  symbol: string,
-  newName: string,
-): WorkspaceEdit => {
+const createEditsForSymbol = (uri: string, symbol: string, newName: string): WorkspaceEdit => {
   const edits: WorkspaceEdit = { changes: {} };
   const content = documents.get(uri);
 

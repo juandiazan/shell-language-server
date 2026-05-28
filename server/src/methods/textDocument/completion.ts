@@ -9,22 +9,16 @@ import {
   CompletionDetail,
 } from "../../interfaces/completion";
 import { Position } from "../../interfaces/location";
-import * as fs from "fs";
-import * as path from "path";
+import { words } from "../../wordList";
 
 const MAX_LENGTH = 1000;
-
-const words = fs
-  .readFileSync(path.join(__dirname, "../../exampleWords.txt"))
-  .toString()
-  .split("\n");
 
 interface TextDocumentPositionParams {
   textDocument: TextDocumentIdentifier;
   position: Position;
 }
 
-export interface CompletionParams extends TextDocumentPositionParams {}
+export type CompletionParams = TextDocumentPositionParams;
 
 export const completion = (message: RequestMessage): CompletionList | null => {
   const params = message.params as CompletionParams;

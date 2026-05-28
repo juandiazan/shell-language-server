@@ -13,10 +13,10 @@ export namespace DiagnosticType {
 
 type DiagnosticSeverity = 1 | 2 | 3 | 4;
 export namespace DiagnosticSeverity {
-  export const Error: 1 = 1;
-  export const Warning: 2 = 2;
-  export const Information: 3 = 3;
-  export const Hint: 4 = 4;
+  export const Error = 1 as const;
+  export const Warning = 2 as const;
+  export const Information = 3 as const;
+  export const Hint = 4 as const;
 }
 
 export interface Diagnostic {
