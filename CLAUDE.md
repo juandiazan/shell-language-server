@@ -19,7 +19,7 @@ npm run compile
 npm run watch
 ```
 
-There is no lint or test script. After any code change, run `npm run compile` to verify it builds.
+There is also `npm run lint` (ESLint) and `npm run format` (Prettier). After any code change, run `npm run compile` to verify it builds.
 
 ## Running the extension
 
@@ -50,7 +50,7 @@ server/src/interfaces/
   diagnostics.ts            — Diagnostic types and DiagnosticType enum
   location.ts               — Position, Range types
 server/src/log.ts           — appends to lsp.log
-server/src/exampleWords.txt — word list loaded at startup for completion
+server/src/wordList.ts      — word list for completion (compiled into out/ by tsc)
 ```
 
 **Request vs notification flow**: `server.ts` reads from `process.stdin`, parses `Content-Length` framed messages, looks up the handler in `methodLookup`, and writes the response to `process.stdout` only for request messages (those with an `id`). Notification handlers return `void` and receive no response.
