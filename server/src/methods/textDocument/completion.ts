@@ -10,13 +10,12 @@ import {
 } from "../../interfaces/completion";
 import { Position } from "../../interfaces/location";
 import * as fs from "fs";
+import * as path from "path";
 
 const MAX_LENGTH = 1000;
 
 const words = fs
-  .readFileSync(
-    "/home/juan/ort-proyectos/shell-language-server/server/src/exampleWords.txt",
-  )
+  .readFileSync(path.join(__dirname, "../../exampleWords.txt"))
   .toString()
   .split("\n");
 
