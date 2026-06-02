@@ -1,10 +1,9 @@
 import * as fs from "fs";
-import * as path from "path";
 import { pathToFileURL } from "url";
 import { documents, TextDocumentPositionParams } from "../../interfaces/documents";
 import { RequestMessage } from "../../server";
 import { Location } from "../../interfaces/location";
-import { workspaceRoot } from "../../interfaces/workspace";
+import { workspaceRoot, collectShellFiles } from "../../interfaces/workspace";
 
 type DefinitionParams = TextDocumentPositionParams;
 
@@ -117,31 +116,6 @@ const findDefinitionInContent = (uri: string, content: string, symbol: string): 
   }
 
   return null;
-};
-
-const collectShellFiles = (dir: string, visited = new Set<string>()): string[] => {
-  if (visited.has(dir)) return [];
-  visited.add(dir);
-
-  const results: string[] = [];
-  let entries: fs.Dirent[];
-  try {
-    entries = fs.readdirSync(dir, { withFileTypes: true });
-  } catch {
-    return results;
-  }
-
-  for (const entry of entries) {
-    if (entry.name.startsWith(".") || entry.name === "node_modules") continue;
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      results.push(...collectShellFiles(fullPath, visited));
-    } else if (entry.isFile() && entry.name.endsWith(".sh")) {
-      results.push(fullPath);
-    }
-  }
-
-  return results;
 };
 
 export const definition = (message: RequestMessage): Location | null => {
