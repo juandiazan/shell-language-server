@@ -1,4 +1,6 @@
+import { fileURLToPath } from "url";
 import { RequestMessage } from "../server";
+import { setWorkspaceRoot } from "../interfaces/workspace";
 
 type ServerCapabilities = Record<string, unknown>;
 
@@ -10,7 +12,17 @@ interface InitializeResult {
   };
 }
 
-export const initialize = (_message: RequestMessage): InitializeResult => {
+interface InitializeParams {
+  rootUri?: string | null;
+  rootPath?: string | null;
+}
+
+export const initialize = (message: RequestMessage): InitializeResult => {
+  const params = message.params as InitializeParams;
+  const root = params?.rootUri ?? params?.rootPath ?? null;
+  if (root) {
+    setWorkspaceRoot(root.startsWith("file://") ? fileURLToPath(root) : root);
+  }
   return {
     capabilities: {
       completionProvider: { snippetSupport: true },

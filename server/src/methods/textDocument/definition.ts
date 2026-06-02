@@ -1,6 +1,10 @@
+import * as fs from "fs";
+import * as path from "path";
+import { pathToFileURL } from "url";
 import { documents, TextDocumentPositionParams } from "../../interfaces/documents";
 import { RequestMessage } from "../../server";
 import { Location } from "../../interfaces/location";
+import { workspaceRoot } from "../../interfaces/workspace";
 
 type DefinitionParams = TextDocumentPositionParams;
 
@@ -115,14 +119,31 @@ const findDefinitionInContent = (uri: string, content: string, symbol: string): 
   return null;
 };
 
-/**
- * Handles `textDocument/definition` requests by resolving the symbol under the
- * cursor to its definition location in the current document or other open
- * documents.
- *
- * @param message JSON-RPC request message with definition parameters.
- * @returns A single location result or null when no definition is found.
- */
+const collectShellFiles = (dir: string, visited = new Set<string>()): string[] => {
+  if (visited.has(dir)) return [];
+  visited.add(dir);
+
+  const results: string[] = [];
+  let entries: fs.Dirent[];
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return results;
+  }
+
+  for (const entry of entries) {
+    if (entry.name.startsWith(".") || entry.name === "node_modules") continue;
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...collectShellFiles(fullPath, visited));
+    } else if (entry.isFile() && entry.name.endsWith(".sh")) {
+      results.push(fullPath);
+    }
+  }
+
+  return results;
+};
+
 export const definition = (message: RequestMessage): Location | null => {
   const params = message.params as DefinitionParams;
   const content = documents.get(params.textDocument.uri);
@@ -151,16 +172,29 @@ export const definition = (message: RequestMessage): Location | null => {
     return currentDocumentDefinition;
   }
 
-  // if definition is not found, look for it on every open document
+  // search other open documents
   for (const [uri, documentContent] of documents.entries()) {
-    if (uri === params.textDocument.uri) {
-      continue;
-    }
+    if (uri === params.textDocument.uri) continue;
 
     const definitionInOpenDocument = findDefinitionInContent(uri, documentContent, symbol);
+    if (definitionInOpenDocument) return definitionInOpenDocument;
+  }
 
-    if (definitionInOpenDocument) {
-      return definitionInOpenDocument;
+  // search workspace .sh files not already open
+  if (workspaceRoot) {
+    for (const filePath of collectShellFiles(workspaceRoot)) {
+      const fileUri = pathToFileURL(filePath).href;
+      if (documents.has(fileUri)) continue;
+
+      let fileContent: string;
+      try {
+        fileContent = fs.readFileSync(filePath, "utf-8");
+      } catch {
+        continue;
+      }
+
+      const definitionInWorkspace = findDefinitionInContent(fileUri, fileContent, symbol);
+      if (definitionInWorkspace) return definitionInWorkspace;
     }
   }
 
