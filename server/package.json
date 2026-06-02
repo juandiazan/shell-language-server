@@ -1,7 +1,7 @@
 {
   "name": "shell_language_server",
-  "description": "Shell Language Server created for a Uni subject",
-  "version": "1.0.0",
+  "description": "Language Server for Bash",
+  "version": "0.1.0",
   "author": "Juan Diaz",
   "license": "MIT",
   "engines": {

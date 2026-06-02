@@ -1,10 +1,10 @@
 {
-  "name": "shell_lsp",
-  "description": "Shell Language Server and Client for VS Code created for a Uni subject",
+  "name": "bash_lsp",
+  "description": "Bash Language Server and Client",
   "author": "Juan Diaz",
   "license": "MIT",
-  "version": "1.0.0",
-  "publisher": "Juan Diaz",
+  "version": "0.1.0",
+  "publisher": "juandiazan",
   "categories": [],
   "engines": {
     "vscode": "^1.75.0"

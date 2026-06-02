@@ -129,6 +129,70 @@ From the root directory of this project, run `code .` Then in VS Code
 └── tsconfig.json           // Top-level TypeScript config
 ```
 
+## Publishing to the VS Code Marketplace
+
+### First-time setup
+
+1. Install the `vsce` tool:
+   ```bash
+   npm install -g @vscode/vsce
+   ```
+
+2. Create a publisher at https://marketplace.visualstudio.com/manage (sign in with a Microsoft account).
+
+3. Get a Personal Access Token: Azure DevOps → User Settings → Personal access tokens → create one with **Marketplace → Manage** scope.
+
+4. Make sure `package.json` has:
+   - `"publisher"` set to your publisher ID (slug, not display name)
+   - `"repository"` with the GitHub URL
+   - `"version"` following semver (start at `0.1.0`)
+
+5. Add a `.vscodeignore` to exclude dev files from the bundle:
+   ```
+   .vscode/**
+   node_modules/**
+   nvim-client/**
+   docs/**
+   src/**
+   tsconfig.json
+   *.log
+   ```
+
+6. Log in:
+   ```bash
+   vsce login your-publisher-id
+   ```
+
+7. Publish:
+   ```bash
+   vsce publish
+   ```
+
+### Testing before publishing
+
+Package locally first and install the resulting `.vsix`:
+
+```bash
+vsce package
+code --install-extension bash_lsp-0.1.0.vsix
+```
+
+Or via the VS Code UI: Extensions sidebar → `...` → **Install from VSIX**.
+
+### Shipping an update
+
+Bump the version and republish. You can let `vsce` handle the version bump:
+
+```bash
+vsce publish patch   # 0.1.0 → 0.1.1
+vsce publish minor   # 0.1.0 → 0.2.0
+vsce publish major   # 0.1.0 → 1.0.0
+```
+
+This updates `package.json` and publishes in one step. Existing users receive the update automatically within a few hours.
+
+> **Note:** keep `serverInfo.version` in `server/src/methods/initialize.ts` in sync with `package.json` when bumping versions manually.
+
 ## Information of interest
 
 - [LSP Docs](https://microsoft.github.io/language-server-protocol/)
