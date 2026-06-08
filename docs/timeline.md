@@ -130,8 +130,22 @@ Décima reunión
 
 ## 20/05/2026
 
-Implementación de LSP para Neovim y pequeña guía de como hacerlo funcionar.
+Implementación de LSP para Neovim y pequeña guía de como hacerlo funcionar
 
 ## 27/05/2026
 
 GitHub Actions de Formatting, Linting y Build y refactors varios
+
+## 02/06/2026
+
+- Décimoprimera reunión
+- Implementación de rename y go-to definition en toda la workspace
+- Issue templates (bugfix y feature request) y Pull Request template
+
+## 08/06/2026
+
+Creación de SKILL.md para agregar una nueva language feature
+
+## 09/06/2026
+
+Décimosegunda reunión
