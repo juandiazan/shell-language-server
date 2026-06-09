@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-A TypeScript VS Code extension with an embedded shell language server. The server speaks the Language Server Protocol (LSP) over stdio using raw JSON-RPC — no `vscode-languageserver` library. There is also a Neovim client under `nvim-client/`.
+A TypeScript VS Code extension with an embedded shell language server. The server speaks the Language Server Protocol (LSP) over stdio using raw JSON-RPC — no `vscode-languageserver` library.
+
+The server is also published to npm as the `bash_lsp` package, which exposes a standalone `shell-language-server` CLI usable by any LSP client. A Neovim setup is documented under `nvim-client/` (see also `docs/installation-and-nvim.md`).
 
 ## Build commands
 
@@ -21,19 +23,24 @@ npm run watch
 
 There is also `npm run lint` (ESLint) and `npm run format` (Prettier). After any code change, run `npm run compile` to verify it builds.
 
+`server/out/` is a git-ignored build artifact — never commit it. It is produced by `tsc` locally for dev/debug, and rebuilt fresh by `prepublishOnly` when publishing to npm (shipped via the `files` field).
+
+CI uses **pnpm** (`pnpm install` / `pnpm compile`) in `.github/workflows/`.
+
 ## Running the extension
 
 **VS Code**: Open the repo in VS Code, then press `F5` (Launch Client). This opens an Extension Development Host window where the server runs against `.sh` files.
 
-**Neovim**: See `nvim-client/README.md`. The compiled server entry point is `server/out/server.js`.
+**Neovim**: Install the published CLI with `npm install -g bash_lsp`, then point the client at the `shell-language-server` command. See `nvim-client/README.md` and `nvim-client/init.lua`. For local development against uncommitted changes, run the build directly: `node server/out/server.js`.
 
 ## Architecture
 
 ```
 client/src/extension.ts     — VS Code extension host; spawns server.js via stdio
+server/bin/shell-language-server.js — CLI launcher (shebang) that requires ../out/server.js; the npm `bin` entry
 server/src/server.ts        — JSON-RPC framing loop; dispatches to methodLookup
 server/src/methods/
-  initialize.ts             — advertises all server capabilities
+  initialize.ts             — advertises all server capabilities; reads serverInfo.version from root package.json at runtime
   textDocument/
     completion.ts           — prefix-matched word list + snippet keywords
     definition.ts           — go-to-definition
@@ -64,7 +71,15 @@ server/src/wordList.ts      — word list for completion (compiled into out/ by 
 3. Register it in `methodLookup` in `server/src/server.ts`.
 4. Add the return type to the `RequestMethod` union in `server.ts`.
 
+## Distribution and releasing
+
+- Published to npm as `bash_lsp`; only `server/bin` and `server/out` ship (the `files` field). The VS Code client and TS sources are not published.
+- **Single source of truth for the version: the root `package.json` `version`.** `serverInfo.version` reads it at runtime, and `server/package.json` has no `version` field. Don't hardcode versions elsewhere.
+- Releases are automated: pushing a `v*` tag runs `.github/workflows/release.yml`, which compiles and runs `npm publish` (needs the `NPM_TOKEN` repo secret). Cut a release with `npm version <patch|minor|major>` then `git push --follow-tags`.
+- Full versioning/release docs: `docs/versioning.md`. Install + Neovim docs: `docs/installation-and-nvim.md`.
+
 ## Known caveats
 
 - `lsp.log` is append-only and grows unbounded; safe to delete between sessions.
 - `hover.ts` calls `execSync('man <command>')` synchronously on the LSP request thread.
+- `hover.ts` relies on `man`, which is absent on Windows; hover returns nothing there while other features work.
