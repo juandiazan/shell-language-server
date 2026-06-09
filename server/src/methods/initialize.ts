@@ -1,6 +1,22 @@
 import { fileURLToPath } from "url";
+import { readFileSync } from "fs";
+import { join } from "path";
 import { RequestMessage } from "../server";
 import { setWorkspaceRoot } from "../interfaces/workspace";
+
+// Read from the package manifest so serverInfo.version tracks package.json.
+// From server/out/methods/ the root manifest is three levels up.
+const serverVersion = ((): string | undefined => {
+  try {
+    const manifest = readFileSync(
+      join(__dirname, "../../../package.json"),
+      "utf8"
+    );
+    return (JSON.parse(manifest) as { version?: string }).version;
+  } catch {
+    return undefined;
+  }
+})();
 
 type ServerCapabilities = Record<string, unknown>;
 
@@ -38,7 +54,7 @@ export const initialize = (message: RequestMessage): InitializeResult => {
     },
     serverInfo: {
       name: "shell-language-server",
-      version: "0.1.0",
+      version: serverVersion,
     },
   };
 };

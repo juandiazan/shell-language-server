@@ -4,25 +4,25 @@ The server is plain JSON-RPC over stdio with no external runtime dependencies, s
 
 ## How it is packaged
 
-The server has no runtime dependencies, so the **compiled output (`server/out`) is committed to the repo** and shipped as-is — there is no build, no `tsc`, and no dependency install when someone installs the CLI. A few pieces make this work:
+The server has no runtime dependencies and is published to the npm registry as a prebuilt CLI — installing it downloads a tarball of already-compiled JavaScript, so there is no build, no `tsc`, and no dependency install on the target machine. A few pieces make this work:
 
 - `server/bin/shell-language-server.js` — a launcher with a `#!/usr/bin/env node` shebang that `require`s `../out/server.js` *relative to itself*, so it works regardless of where the package is installed.
 - The root `package.json` `"bin"` field exposes the `shell-language-server` command. On install, npm generates the PATH shim for the host OS (a shell script on macOS/Linux, `.cmd`/`.ps1` on Windows) — this is what makes it cross-platform.
 - The root `package.json` `"files"` field ships only `server/bin` and `server/out` to consumers. The VS Code client and the TypeScript sources are deliberately left out.
-- `.gitignore` is scoped so `server/out` is tracked while `client/out` and the root `/out` stay ignored.
+- The `"prepublishOnly"` script compiles the server right before publishing, so the published tarball can never contain stale output. `server/out` itself stays git-ignored — it is a build artifact, not source.
 - `"postinstall"` is guarded with a Node check so it only installs the VS Code client's dependencies in a full dev checkout (`client/` present) and quietly no-ops for CLI consumers.
 
-> **Keeping the prebuilt output current:** because `server/out` is committed, you must rebuild and commit it after changing server source — run `npm run compile` (or `npx tsc -p server/tsconfig.json`) and commit `server/out` before pushing, otherwise installs will ship stale code.
+Releases are automated: pushing a `v*` tag triggers the GitHub Actions workflow in `.github/workflows/release.yml`, which compiles and runs `npm publish`. Cut a release with `npm version <patch|minor|major>` followed by `git push --follow-tags`.
 
-## Installing from GitHub
+## Installing
 
 On any machine with Node.js installed:
 
 ```bash
-npm install -g github:juandiazan/shell-language-server
+npm install -g bash_lsp
 ```
 
-This clones the repo, runs `prepare` to compile the server, and puts a `shell-language-server` command on your `PATH`. Pin to a tag or branch with `github:juandiazan/shell-language-server#sometag`.
+This downloads the prebuilt package and puts a `shell-language-server` command on your `PATH`.
 
 > **Permission errors (`EACCES`) on Linux/macOS:** if the global install fails with `EACCES ... symlink ... /usr/lib/node_modules`, your npm global prefix is a root-owned system directory. Don't use `sudo` — point npm at a prefix you own instead (one-time setup):
 >

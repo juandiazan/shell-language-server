@@ -14,17 +14,21 @@
   ],
   "main": "./client/out/extension",
   "bin": {
-    "shell-language-server": "./server/bin/shell-language-server.js"
+    "shell-language-server": "server/bin/shell-language-server.js"
   },
   "files": [
     "server/bin",
     "server/out"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "contributes": {
     "configuration": {}
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
+    "prepublishOnly": "npm run compile",
     "compile": "tsc -b",
     "watch": "tsc -b -w",
     "postinstall": "node -e \"const f=require('fs');if(f.existsSync('client/package.json')){require('child_process').execSync('npm install',{cwd:'client',stdio:'inherit'})}\"",

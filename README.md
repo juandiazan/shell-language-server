@@ -131,68 +131,7 @@ From the root directory of this project, run `code .` Then in VS Code
 
 ## Installation and Neovim setup
 
-The server is plain JSON-RPC over stdio with no external runtime dependencies, so it can be installed as a standalone command and used by any LSP client. The only requirement on the target machine is **Node.js + npm**.
-
-### How it is packaged
-
-Three pieces in the repo make the server installable as a CLI:
-
-- `server/bin/shell-language-server.js` — a launcher with a `#!/usr/bin/env node` shebang that `require`s `../out/server.js` *relative to itself*, so it works regardless of where the package is installed.
-- The root `package.json` `"bin"` field exposes the `shell-language-server` command. On install, npm generates the PATH shim for the host OS (a shell script on macOS/Linux, `.cmd`/`.ps1` on Windows) — this is what makes it cross-platform.
-- The root `package.json` `"files"` field forces `server/out` and `server/bin` into the package. This is required because `out/` is git-ignored; without it npm would treat `.gitignore` as `.npmignore` and drop the compiled server.
-- The root `package.json` `"prepare"` script (`tsc -p server/tsconfig.json`) compiles the server automatically on install. npm installs `typescript` (a devDependency) just to run this step, then prunes it. Only the server is compiled — no VS Code/client dependencies are needed.
-
-### Installing from GitHub
-
-On any machine with Node.js installed:
-
-```bash
-npm install -g github:juandiazan/shell-language-server
-```
-
-This clones the repo, runs `prepare` to compile the server, and puts a `shell-language-server` command on your `PATH`. Pin to a tag or branch with `github:juandiazan/shell-language-server#sometag`.
-
-Verify the launcher works:
-
-```bash
-shell-language-server   # hangs waiting for stdin (it is listening) — Ctrl-C to exit
-```
-
-> **Windows caveat:** `hover.ts` shells out to `man`, which does not exist on Windows. Hover will return nothing there; every other feature works.
-
-### Configuring Neovim
-
-Because the binary is on `PATH`, the config is path-free and identical on every machine.
-
-**Neovim 0.11+** (built-in `vim.lsp` API):
-
-```lua
-vim.lsp.config["shell-ls"] = {
-  cmd = { "shell-language-server" },
-  filetypes = { "sh", "bash" },
-  root_markers = { ".git", ".sh" },
-}
-
-vim.lsp.enable("shell-ls")
-```
-
-**Neovim < 0.11** (autocommand form — note that pull diagnostics require 0.11+):
-
-```lua
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "sh", "bash" },
-  callback = function(args)
-    vim.lsp.start({
-      name = "shell-ls",
-      cmd = { "shell-language-server" },
-      root_dir = vim.fs.root(args.buf, { ".git" }) or vim.fn.getcwd(),
-      bufnr = args.buf,
-    })
-  end,
-})
-```
-
-Open a `.sh` file, then check `:checkhealth vim.lsp` / `:LspInfo`. Test with `K` (hover), `gd` (definition), `<C-x><C-o>` (completion), and `:lua vim.lsp.buf.rename()`.
+The server can be installed as a standalone `shell-language-server` command and used by any LSP client (including Neovim). See [installation-and-nvim.md](installation-and-nvim.md) for packaging details, installing from GitHub, and Neovim configuration.
 
 ## Publishing to the VS Code Marketplace
 
