@@ -13,6 +13,13 @@
     "onLanguage:shellscript"
   ],
   "main": "./client/out/extension",
+  "bin": {
+    "shell-language-server": "./server/bin/shell-language-server.js"
+  },
+  "files": [
+    "server/bin",
+    "server/out"
+  ],
   "contributes": {
     "configuration": {}
   },
@@ -20,6 +27,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -b",
     "watch": "tsc -b -w",
+    "prepare": "tsc -p server/tsconfig.json",
     "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
     "lint": "eslint 'client/src/**/*.ts' 'server/src/**/*.ts'",
     "format": "prettier --write 'client/src/**/*.ts' 'server/src/**/*.ts'",
