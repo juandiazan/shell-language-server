@@ -131,7 +131,7 @@ From the root directory of this project, run `code .` Then in VS Code
 
 ## Installation and Neovim setup
 
-The server can be installed as a standalone `shell-language-server` command and used by any LSP client (including Neovim). See [installation-and-nvim.md](installation-and-nvim.md) for packaging details, installing from GitHub, and Neovim configuration.
+The server can be installed as a standalone `shell-language-server` command and used by any LSP client (including Neovim). See [docs/installation-and-nvim.md](docs/installation-and-nvim.md) for packaging details, installing from npm, and Neovim configuration.
 
 ## Publishing to the VS Code Marketplace
 
@@ -201,26 +201,7 @@ This updates `package.json` and publishes in one step. Existing users receive th
 
 #### npm CLI (`shell-language-server`)
 
-Releases to npm are automated by `.github/workflows/release.yml`, which publishes whenever a `v*` tag is pushed. To ship an update:
-
-1. Commit your changes.
-2. Bump the version, which also commits and creates the matching tag:
-   ```bash
-   npm version patch   # 0.1.0 → 0.1.1 (+ commit + tag v0.1.1)
-   npm version minor   # 0.1.0 → 0.2.0
-   npm version major   # 0.1.0 → 1.0.0
-   ```
-3. Push the commit and the tag to trigger the release workflow:
-   ```bash
-   git push --follow-tags
-   ```
-
-Then verify and update locally:
-
-```bash
-npm view bash_lsp version    # confirm the registry has the new version
-npm install -g bash_lsp      # pull it onto your machine
-```
+Releases to npm are automated by `.github/workflows/release.yml`, which publishes whenever a `v*` tag is pushed. See [docs/versioning.md](docs/versioning.md) for the full versioning model and release flow.
 
 ## Information of interest
 
