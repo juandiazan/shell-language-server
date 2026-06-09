@@ -2,18 +2,6 @@
 
 The server is plain JSON-RPC over stdio with no external runtime dependencies, so it can be installed as a standalone command and used by any LSP client. The only requirement on the target machine is **Node.js + npm**.
 
-## How it is packaged
-
-The server has no runtime dependencies and is published to the npm registry as a prebuilt CLI — installing it downloads a tarball of already-compiled JavaScript, so there is no build, no `tsc`, and no dependency install on the target machine. A few pieces make this work:
-
-- `server/bin/shell-language-server.js` — a launcher with a `#!/usr/bin/env node` shebang that `require`s `../out/server.js` *relative to itself*, so it works regardless of where the package is installed.
-- The root `package.json` `"bin"` field exposes the `shell-language-server` command. On install, npm generates the PATH shim for the host OS (a shell script on macOS/Linux, `.cmd`/`.ps1` on Windows) — this is what makes it cross-platform.
-- The root `package.json` `"files"` field ships only `server/bin` and `server/out` to consumers. The VS Code client and the TypeScript sources are deliberately left out.
-- The `"prepublishOnly"` script compiles the server right before publishing, so the published tarball can never contain stale output. `server/out` itself stays git-ignored — it is a build artifact, not source.
-- `"postinstall"` is guarded with a Node check so it only installs the VS Code client's dependencies in a full dev checkout (`client/` present) and quietly no-ops for CLI consumers.
-
-Releases are automated: pushing a `v*` tag triggers the GitHub Actions workflow in `.github/workflows/release.yml`, which compiles and runs `npm publish`. Cut a release with `npm version <patch|minor|major>` followed by `git push --follow-tags`.
-
 ## Installing
 
 On any machine with Node.js installed:
@@ -40,7 +28,7 @@ This downloads the prebuilt package and puts a `shell-language-server` command o
 Verify the launcher works:
 
 ```bash
-shell-language-server   # hangs waiting for stdin (it is listening) — Ctrl-C to exit
+shell-language-server   # hangs waiting for stdin, Ctrl-C to exit
 ```
 
 > **Windows caveat:** `hover.ts` shells out to `man`, which does not exist on Windows. Hover will return nothing there; every other feature works.

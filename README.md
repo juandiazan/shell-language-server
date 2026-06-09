@@ -1,13 +1,10 @@
-# VS Code Language Server extension implementation guide
+# Shellscript Language Server
 
-[![Lint & Format](https://github.com/juandiazan/shell-language-server/actions/workflows/lint.yml/badge.svg)](https://github.com/juandiazan/shell-language-server/actions/workflows/lint.yml)
-[![Build](https://github.com/juandiazan/shell-language-server/actions/workflows/build.yml/badge.svg)](https://github.com/juandiazan/shell-language-server/actions/workflows/build.yml)
+[![Build](https://github.com/juandiazan/shell-language-server/actions/workflows/build.yml/badge.svg)](https://github.com/juandiazan/shell-language-server/actions/workflows/build.yml) [![Lint & Format](https://github.com/juandiazan/shell-language-server/actions/workflows/lint.yml/badge.svg)](https://github.com/juandiazan/shell-language-server/actions/workflows/lint.yml) [![Deploy](https://github.com/juandiazan/shell-language-server/actions/workflows/release.yml/badge.svg)](https://github.com/juandiazan/shell-language-server/actions/workflows/release.yml)
 
-This README aims to provide a step-by-step guide for developing a self-contained Language Server Extension for VS Code using TypeScript, and adding new features to an existing one.
+This README aims to provide a guide for contributing language features to this Language Server and to document some aspects of its inner workings.
 
-"Self-contained" in this context means that this extension bundles its own language server code rather than wrapping an existing language server executable.
-
-If starting from scratch, see [Getting started](#getting-started). If you want to add a feature to this language server instead go to [Implementing new features](#implementing-new-features).
+If starting a new Language Server from scratch, see [Getting started](#getting-started). If you want to add a feature to this language server instead go to [Implementing new features](#implementing-new-features-to-this-project).
 
 ## Getting Started
 
@@ -133,75 +130,9 @@ From the root directory of this project, run `code .` Then in VS Code
 
 The server can be installed as a standalone `shell-language-server` command and used by any LSP client (including Neovim). See [docs/installation-and-nvim.md](docs/installation-and-nvim.md) for packaging details, installing from npm, and Neovim configuration.
 
-## Publishing to the VS Code Marketplace
+## Deployment
 
-### First-time setup
-
-1. Install the `vsce` tool:
-   ```bash
-   npm install -g @vscode/vsce
-   ```
-
-2. Create a publisher at https://marketplace.visualstudio.com/manage (sign in with a Microsoft account).
-
-3. Get a Personal Access Token: Azure DevOps → User Settings → Personal access tokens → create one with **Marketplace → Manage** scope.
-
-4. Make sure `package.json` has:
-   - `"publisher"` set to your publisher ID (slug, not display name)
-   - `"repository"` with the GitHub URL
-   - `"version"` following semver (start at `0.1.0`)
-
-5. Add a `.vscodeignore` to exclude dev files from the bundle:
-   ```
-   .vscode/**
-   node_modules/**
-   nvim-client/**
-   docs/**
-   src/**
-   tsconfig.json
-   *.log
-   ```
-
-6. Log in:
-   ```bash
-   vsce login your-publisher-id
-   ```
-
-7. Publish:
-   ```bash
-   vsce publish
-   ```
-
-### Testing before publishing
-
-Package locally first and install the resulting `.vsix`:
-
-```bash
-vsce package
-code --install-extension bash_lsp-0.1.0.vsix
-```
-
-Or via the VS Code UI: Extensions sidebar → `...` → **Install from VSIX**.
-
-### Shipping an update
-
-This project ships through two channels — update whichever you publish to.
-
-#### VS Code Marketplace (`vsce`)
-
-Bump the version and republish. You can let `vsce` handle the version bump:
-
-```bash
-vsce publish patch   # 0.1.0 → 0.1.1
-vsce publish minor   # 0.1.0 → 0.2.0
-vsce publish major   # 0.1.0 → 1.0.0
-```
-
-This updates `package.json` and publishes in one step. Existing users receive the update automatically within a few hours.
-
-#### npm CLI (`shell-language-server`)
-
-Releases to npm are automated by `.github/workflows/release.yml`, which publishes whenever a `v*` tag is pushed. See [docs/versioning.md](docs/versioning.md) for the full versioning model and release flow.
+See [docs/deployment-and-updating.md](docs/deployment-and-updating.md) for first-time VS Code Marketplace setup and how to ship updates to both the Marketplace and the npm CLI.
 
 ## Information of interest
 
