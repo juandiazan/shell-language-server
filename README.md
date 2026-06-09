@@ -185,6 +185,10 @@ Or via the VS Code UI: Extensions sidebar → `...` → **Install from VSIX**.
 
 ### Shipping an update
 
+This project ships through two channels — update whichever you publish to.
+
+#### VS Code Marketplace (`vsce`)
+
 Bump the version and republish. You can let `vsce` handle the version bump:
 
 ```bash
@@ -195,7 +199,28 @@ vsce publish major   # 0.1.0 → 1.0.0
 
 This updates `package.json` and publishes in one step. Existing users receive the update automatically within a few hours.
 
-> **Note:** keep `serverInfo.version` in `server/src/methods/initialize.ts` in sync with `package.json` when bumping versions manually.
+#### npm CLI (`shell-language-server`)
+
+Releases to npm are automated by `.github/workflows/release.yml`, which publishes whenever a `v*` tag is pushed. To ship an update:
+
+1. Commit your changes.
+2. Bump the version, which also commits and creates the matching tag:
+   ```bash
+   npm version patch   # 0.1.0 → 0.1.1 (+ commit + tag v0.1.1)
+   npm version minor   # 0.1.0 → 0.2.0
+   npm version major   # 0.1.0 → 1.0.0
+   ```
+3. Push the commit and the tag to trigger the release workflow:
+   ```bash
+   git push --follow-tags
+   ```
+
+Then verify and update locally:
+
+```bash
+npm view bash_lsp version    # confirm the registry has the new version
+npm install -g bash_lsp      # pull it onto your machine
+```
 
 ## Information of interest
 
