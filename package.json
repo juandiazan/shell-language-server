@@ -3,7 +3,7 @@
   "description": "Bash Language Server and Client",
   "author": "Juan Diaz",
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "juandiazan",
   "categories": [],
   "engines": {
