@@ -79,9 +79,9 @@ export const CompletionKeywords: Record<Word, Completion> = {
   if: "if [[ ${1:condition} ]]; then\n \t$0\nfi",
   ifelse: "if [[ ${1:condition} ]]; then\n \t$0\nelse\n \t\nfi",
   while: "while [ ${1:condition} ]; do\n \t$0\ndone",
-  for: "for $${1:elem} in $${2:list}; do\n \t$0\ndone",
+  for: "for ${1:elem} in ${2:list}; do\n \t$0\ndone",
   case:
-    "case $${1:var} in\n" +
+    "case \\$${1:var} in\n" +
     "\t${2:value})\n" +
     "\t\t$0\n" +
     "\t\t;;\n" +
