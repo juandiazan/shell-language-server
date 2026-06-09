@@ -8,10 +8,7 @@ import { setWorkspaceRoot } from "../interfaces/workspace";
 // From server/out/methods/ the root manifest is three levels up.
 const serverVersion = ((): string | undefined => {
   try {
-    const manifest = readFileSync(
-      join(__dirname, "../../../package.json"),
-      "utf8"
-    );
+    const manifest = readFileSync(join(__dirname, "../../../package.json"), "utf8");
     return (JSON.parse(manifest) as { version?: string }).version;
   } catch {
     return undefined;
