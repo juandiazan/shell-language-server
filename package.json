@@ -1,6 +1,6 @@
 {
   "name": "bash-lsp",
-  "displayName": "Shell Language Server",
+  "displayName": "Shellscript LS",
   "description": "Language Server for Shell scripting languages",
   "author": "Juan Diaz",
   "license": "MIT",

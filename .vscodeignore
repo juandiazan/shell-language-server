@@ -8,6 +8,8 @@ neovim/**
 **/*.map
 **/node_modules/**
 .claude/**
+scripts/**
+server/README.md
 client/package.json
 client/package-lock.json
 server/package-lock.json
