@@ -149,3 +149,20 @@ Creación de SKILL.md para agregar una nueva language feature
 ## 09/06/2026
 
 Décimosegunda reunión
+
+## 10/06/2026
+
+Avances en documentación formal
+
+## 15/06/2026
+
+Avances en documentación formal
+
+## 16/06/2026
+
+Décimotercera reunión
+
+## 17/06/2026
+
+- Publicación a VSCode Extension Marketplace
+- Avances en documentación

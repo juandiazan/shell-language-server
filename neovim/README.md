@@ -7,7 +7,7 @@ For packaging details and other LSP clients, see [../docs/installation-and-nvim.
 ## 1. Install the server
 
 ```bash
-npm install -g bash_lsp
+npm install -g bash-lsp
 ```
 
 This puts a `shell-language-server` command on your `PATH`. Confirm it:

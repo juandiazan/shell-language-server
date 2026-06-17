@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A TypeScript VS Code extension with an embedded shell language server. The server speaks the Language Server Protocol (LSP) over stdio using raw JSON-RPC — no `vscode-languageserver` library.
 
-The server is also published to npm as the `bash_lsp` package, which exposes a standalone `shell-language-server` CLI usable by any LSP client. A Neovim setup is documented under `nvim-client/` (see also `docs/installation-and-nvim.md`).
+The server is also published to npm as the `bash-lsp` package, which exposes a standalone `shell-language-server` CLI usable by any LSP client. A Neovim setup is documented under `nvim-client/` (see also `docs/installation-and-nvim.md`).
 
 ## Build commands
 
@@ -31,7 +31,7 @@ CI uses **pnpm** (`pnpm install` / `pnpm compile`) in `.github/workflows/`.
 
 **VS Code**: Open the repo in VS Code, then press `F5` (Launch Client). This opens an Extension Development Host window where the server runs against `.sh` files.
 
-**Neovim**: Install the published CLI with `npm install -g bash_lsp`, then point the client at the `shell-language-server` command. See `nvim-client/README.md` and `nvim-client/init.lua`. For local development against uncommitted changes, run the build directly: `node server/out/server.js`.
+**Neovim**: Install the published CLI with `npm install -g bash-lsp`, then point the client at the `shell-language-server` command. See `nvim-client/README.md` and `nvim-client/init.lua`. For local development against uncommitted changes, run the build directly: `node server/out/server.js`.
 
 ## Architecture
 
@@ -73,7 +73,7 @@ server/src/wordList.ts      — word list for completion (compiled into out/ by 
 
 ## Distribution and releasing
 
-- Published to npm as `bash_lsp`; only `server/bin` and `server/out` ship (the `files` field). The VS Code client and TS sources are not published.
+- Published to npm as `bash-lsp`; only `server/bin` and `server/out` ship (the `files` field). The VS Code client and TS sources are not published.
 - **Single source of truth for the version: the root `package.json` `version`.** `serverInfo.version` reads it at runtime, and `server/package.json` has no `version` field. Don't hardcode versions elsewhere.
 - Releases are automated: pushing a `v*` tag runs `.github/workflows/release.yml`, which compiles and runs `npm publish` (needs the `NPM_TOKEN` repo secret). Cut a release with `npm version <patch|minor|major>` then `git push --follow-tags`.
 - Full versioning/release docs: `docs/versioning.md`. Install + Neovim docs: `docs/installation-and-nvim.md`.

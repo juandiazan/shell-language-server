@@ -46,8 +46,8 @@ Releases are automated: pushing a `v*` tag triggers the GitHub Actions workflow 
 4) Optionally, check version and install locally:
 
 ```bash
-    npm view bash_lsp version    
-    npm install -g bash_lsp      
+    npm view bash-lsp version    
+    npm install -g bash-lsp      
 ```
 
 ## Shipping an update to the VS Code extension
@@ -68,7 +68,7 @@ This updates `package.json` and publishes in one step.
 
 ```bash
     vsce package
-    code --install-extension bash_lsp-<version>.vsix
+    code --install-extension bash-lsp-<version>.vsix
 ```
 
 Or via the VS Code UI: Extensions sidebar --> `...` --> Install from VSIX.

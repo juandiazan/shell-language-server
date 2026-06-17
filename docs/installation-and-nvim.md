@@ -7,7 +7,7 @@ The server is plain JSON-RPC over stdio with no external runtime dependencies, s
 On any machine with Node.js installed:
 
 ```bash
-npm install -g bash_lsp
+npm install -g bash-lsp
 ```
 
 This downloads the prebuilt package and puts a `shell-language-server` command on your `PATH`.
