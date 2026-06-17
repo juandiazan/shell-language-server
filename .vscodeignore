@@ -16,6 +16,5 @@ server/package-lock.json
 .gitignore
 .eslintrc*
 eslint.config.mjs
-pnpm-lock.yaml
 lsp.log
 CLAUDE.md

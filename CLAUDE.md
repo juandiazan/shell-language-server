@@ -25,7 +25,7 @@ There is also `npm run lint` (ESLint) and `npm run format` (Prettier). After any
 
 `server/out/` is a git-ignored build artifact — never commit it. It is produced by `tsc` locally for dev/debug, and rebuilt fresh by `prepublishOnly` when publishing to npm (shipped via the `files` field).
 
-CI uses **pnpm** (`pnpm install` / `pnpm compile`) in `.github/workflows/`.
+CI uses **npm** (`npm ci` / `npm run compile`) in `.github/workflows/`.
 
 ## Running the extension
 

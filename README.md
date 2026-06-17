@@ -38,7 +38,7 @@ If starting a new Language Server from scratch, see [Getting started](#getting-s
 
 ## Scripts
 
-Run these from the repo root with `pnpm <script>`:
+Run these from the repo root with `npm run <script>`:
 
 | Script | Description |
 |---|---|
