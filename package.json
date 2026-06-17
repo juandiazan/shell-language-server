@@ -4,7 +4,7 @@
   "description": "Language Server for Shell scripting languages",
   "author": "Juan Diaz",
   "license": "MIT",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "juandiazan",
   "repository": {
     "type": "git",
