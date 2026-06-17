@@ -78,7 +78,7 @@ server/src/wordList.ts      — word list for completion (compiled into out/ by 
   - **VS Code Marketplace** — the `bash-lsp` extension (`juandiazan.bash-lsp`), defined by the root `package.json` and packaged by `vsce`. The root manifest uses `.vscodeignore` (not a `files` field — `vsce` rejects having both) and bundles `client/out` + `server/out`.
   - npm refuses `bash-lsp` (too similar to `bash_lsp`) and `vsce` refuses `bash_lsp` (underscore invalid), so the two names cannot be unified — hence two manifests.
 - **Versions are kept in lockstep** by `scripts/sync-version.js`, run via the root `version` npm script: `npm version <bump>` updates the root manifest and copies that version into `server/package.json` in the same commit. `serverInfo.version` reads `server/package.json` at runtime (it ships in both the npm tarball and the `.vsix`).
-- Releases are automated: pushing a `v*` tag runs `.github/workflows/release.yml`, which has two parallel jobs — `publish` (`npm publish` from `server/`, needs `NPM_TOKEN`) and `publish-vscode` (`vsce publish`, needs `VSCE_PAT`). Cut a release with `npm version <patch|minor|major>` then `git push --follow-tags`.
+- Releases are automated: pushing a `v*` tag runs `.github/workflows/release.yml`, which has three parallel jobs — `publish` (`npm publish` from `server/`, needs `NPM_TOKEN`), `publish-vscode` (`vsce publish` to the MS Marketplace, needs `VSCE_PAT`), and `publish-openvsx` (`ovsx publish` to Open VSX for VSCodium, needs `OVSX_PAT`). Cut a release with `npm version <patch|minor|major>` then `git push --follow-tags`.
 - Full versioning/release docs: `docs/versioning.md`. Install + Neovim docs: `docs/installation-and-nvim.md`.
 
 ## Known caveats
