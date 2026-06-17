@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A TypeScript VS Code extension with an embedded shell language server. The server speaks the Language Server Protocol (LSP) over stdio using raw JSON-RPC — no `vscode-languageserver` library.
 
-The server is also published to npm as the `bash-lsp` package, which exposes a standalone `shell-language-server` CLI usable by any LSP client. A Neovim setup is documented under `nvim-client/` (see also `docs/installation-and-nvim.md`).
+The server is also published to npm as the `bash_lsp` package (published from `server/` using `server/package.json`), which exposes a standalone `shell-language-server` CLI usable by any LSP client. A Neovim setup is documented under `nvim-client/` (see also `docs/installation-and-nvim.md`).
 
 ## Build commands
 
@@ -31,7 +31,7 @@ CI uses **pnpm** (`pnpm install` / `pnpm compile`) in `.github/workflows/`.
 
 **VS Code**: Open the repo in VS Code, then press `F5` (Launch Client). This opens an Extension Development Host window where the server runs against `.sh` files.
 
-**Neovim**: Install the published CLI with `npm install -g bash-lsp`, then point the client at the `shell-language-server` command. See `nvim-client/README.md` and `nvim-client/init.lua`. For local development against uncommitted changes, run the build directly: `node server/out/server.js`.
+**Neovim**: Install the published CLI with `npm install -g bash_lsp`, then point the client at the `shell-language-server` command. See `nvim-client/README.md` and `nvim-client/init.lua`. For local development against uncommitted changes, run the build directly: `node server/out/server.js`.
 
 ## Architecture
 
@@ -40,7 +40,7 @@ client/src/extension.ts     — VS Code extension host; spawns server.js via std
 server/bin/shell-language-server.js — CLI launcher (shebang) that requires ../out/server.js; the npm `bin` entry
 server/src/server.ts        — JSON-RPC framing loop; dispatches to methodLookup
 server/src/methods/
-  initialize.ts             — advertises all server capabilities; reads serverInfo.version from root package.json at runtime
+  initialize.ts             — advertises all server capabilities; reads serverInfo.version from server/package.json at runtime
   textDocument/
     completion.ts           — prefix-matched word list + snippet keywords
     definition.ts           — go-to-definition
@@ -73,9 +73,12 @@ server/src/wordList.ts      — word list for completion (compiled into out/ by 
 
 ## Distribution and releasing
 
-- Published to npm as `bash-lsp`; only `server/bin` and `server/out` ship (the `files` field). The VS Code client and TS sources are not published.
-- **Single source of truth for the version: the root `package.json` `version`.** `serverInfo.version` reads it at runtime, and `server/package.json` has no `version` field. Don't hardcode versions elsewhere.
-- Releases are automated: pushing a `v*` tag runs `.github/workflows/release.yml`, which compiles and runs `npm publish` (needs the `NPM_TOKEN` repo secret). Cut a release with `npm version <patch|minor|major>` then `git push --follow-tags`.
+- **Two separate distributions, two manifests:**
+  - **npm** — the `bash_lsp` CLI package, defined by `server/package.json` and published from `server/` (`working-directory: server` in CI). Its own `files` field ships only `bin` and `out/**/*.js`.
+  - **VS Code Marketplace** — the `bash-lsp` extension (`juandiazan.bash-lsp`), defined by the root `package.json` and packaged by `vsce`. The root manifest uses `.vscodeignore` (not a `files` field — `vsce` rejects having both) and bundles `client/out` + `server/out`.
+  - npm refuses `bash-lsp` (too similar to `bash_lsp`) and `vsce` refuses `bash_lsp` (underscore invalid), so the two names cannot be unified — hence two manifests.
+- **Versions are kept in lockstep** by `scripts/sync-version.js`, run via the root `version` npm script: `npm version <bump>` updates the root manifest and copies that version into `server/package.json` in the same commit. `serverInfo.version` reads `server/package.json` at runtime (it ships in both the npm tarball and the `.vsix`).
+- Releases are automated: pushing a `v*` tag runs `.github/workflows/release.yml`, which has two parallel jobs — `publish` (`npm publish` from `server/`, needs `NPM_TOKEN`) and `publish-vscode` (`vsce publish`, needs `VSCE_PAT`). Cut a release with `npm version <patch|minor|major>` then `git push --follow-tags`.
 - Full versioning/release docs: `docs/versioning.md`. Install + Neovim docs: `docs/installation-and-nvim.md`.
 
 ## Known caveats

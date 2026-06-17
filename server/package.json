@@ -1,14 +1,28 @@
 {
-  "name": "shell_language_server",
-  "description": "Language Server for Bash",
+  "name": "bash_lsp",
+  "description": "Standalone shell/bash Language Server (LSP) CLI",
   "author": "Juan Diaz",
   "license": "MIT",
+  "version": "0.1.2",
   "engines": {
     "node": "*"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/juandiazan/shell-language-server"
+  },
+  "bin": {
+    "shell-language-server": "bin/shell-language-server.js"
+  },
+  "files": [
+    "bin",
+    "out/**/*.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prepublishOnly": "cd .. && npm run compile"
   },
   "dependencies": {}
 }

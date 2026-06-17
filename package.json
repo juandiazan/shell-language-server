@@ -20,24 +20,14 @@
     "onLanguage:shellscript"
   ],
   "main": "./client/out/extension",
-  "bin": {
-    "shell-language-server": "server/bin/shell-language-server.js"
-  },
-  "files": [
-    "server/bin",
-    "server/out/**/*.js"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
   "contributes": {
     "configuration": {}
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "prepublishOnly": "npm run compile",
     "compile": "tsc -b",
     "watch": "tsc -b -w",
+    "version": "node scripts/sync-version.js && git add server/package.json",
     "postinstall": "node -e \"const f=require('fs');if(f.existsSync('client/package.json')){require('child_process').execSync('npm install',{cwd:'client',stdio:'inherit'})}\"",
     "lint": "eslint 'client/src/**/*.ts' 'server/src/**/*.ts'",
     "format": "prettier --write 'client/src/**/*.ts' 'server/src/**/*.ts'",
