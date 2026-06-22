@@ -24,5 +24,7 @@
   "scripts": {
     "prepublishOnly": "cd .. && npm run compile"
   },
-  "dependencies": {}
+  "devDependencies": {
+    "@types/node": "^20.19.43"
+  }
 }
