@@ -295,7 +295,6 @@ const isInsideQuotedString = (quoteState: QuoteState): boolean => {
   return quoteState.inSingleQuotes || quoteState.inDoubleQuotes;
 };
 
-
 /**
  * Appends a word character to the current word buffer.
  *

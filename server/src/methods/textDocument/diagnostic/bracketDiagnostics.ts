@@ -232,7 +232,6 @@ const isInsideQuotedString = (parserState: ParserState): boolean => {
   return parserState.inSingleQuotes || parserState.inDoubleQuotes;
 };
 
-
 /**
  * Appends to the current shell word or flushes it into case-state processing.
  *
