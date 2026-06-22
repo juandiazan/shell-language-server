@@ -1,24 +1,7 @@
-import { TextDocumentPositionParams } from "../../interfaces/documents";
-import { Range } from "../../interfaces/location";
+import { TextDocumentPositionParams, documents } from "../../interfaces/documents";
 import { RequestMessage } from "../../server";
-import { documents } from "../../interfaces/documents";
 import { execSync } from "child_process";
-
-type MarkupKind = "plaintext" | "markdown";
-namespace MarkupKind {
-  export const PlainText = "plaintext" as const;
-  export const Markdown = "markdown" as const;
-}
-
-interface MarkupContent {
-  kind?: MarkupKind;
-  value: string;
-}
-
-interface Hover {
-  contents: MarkupContent;
-  range?: Range;
-}
+import { Hover, MarkupKind } from "../../interfaces/hover";
 
 type HoverParams = TextDocumentPositionParams;
 
@@ -73,16 +56,24 @@ const wordAtPosition = (line: string, character: number): string | null => {
  * @returns The man page content, or a message if the man page is not found.
  */
 const getManPage = (command: string): string => {
-  try {
-    const manOutput = execSync(`man ${command}`, {
-      encoding: "utf-8",
-      timeout: 5000,
-      stdio: ["pipe", "pipe", "pipe"],
-    });
-    return manOutput;
-  } catch {
-    return `Man page for '${command}' not found.`;
+  const candidates =
+    process.platform === "win32"
+      ? [`wsl man ${command}`, `bash -c "man ${command}"`, `man ${command}`]
+      : [`man ${command}`];
+
+  for (const cmd of candidates) {
+    try {
+      return execSync(cmd, {
+        encoding: "utf-8",
+        timeout: 5000,
+        stdio: ["pipe", "pipe", "pipe"],
+      });
+    } catch {
+      continue;
+    }
   }
+
+  return `Man page for '${command}' not found.`;
 };
 
 export const hover = (message: RequestMessage): Hover | null => {

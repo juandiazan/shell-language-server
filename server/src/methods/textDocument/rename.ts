@@ -8,6 +8,9 @@ interface RenameParams extends TextDocumentPositionParams {
   newName: string;
 }
 
+const normalizeUri = (uri: string): string =>
+  uri.replace(/^file:\/\/\/[A-Z]:/, (m) => m.toLowerCase());
+
 const isWordChar = (char: string): boolean => /[A-Za-z0-9_]/.test(char);
 
 const wordAtPosition = (line: string, character: number): string | null => {
@@ -106,7 +109,7 @@ export const rename = (message: RequestMessage): WorkspaceEdit | null => {
   // rename in workspace
   if (workspaceRoot) {
     for (const filePath of collectShellFiles(workspaceRoot)) {
-      const fileUri = pathToFileURL(filePath).href;
+      const fileUri = normalizeUri(pathToFileURL(filePath).href);
       if (documents.has(fileUri)) continue;
 
       let fileContent: string;
