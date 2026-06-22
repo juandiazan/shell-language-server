@@ -1,5 +1,6 @@
 import { Range } from "../../../interfaces/location";
 import { Diagnostic, DiagnosticSeverity, DiagnosticType } from "../../../interfaces/diagnostics";
+import { isWordChar } from "../../../utils/text";
 
 interface PendingStructureSemicolonCheck {
   expectedKeyword: "then" | "do" | null;
@@ -118,7 +119,7 @@ const processLineForStructureSemicolonDiagnostics = (
       continue;
     }
 
-    if (isWordCharacter(currentChar)) {
+    if (isWordChar(currentChar)) {
       appendWordCharacter(currentWord, currentChar, character);
       continue;
     }
@@ -294,12 +295,6 @@ const isInsideQuotedString = (quoteState: QuoteState): boolean => {
   return quoteState.inSingleQuotes || quoteState.inDoubleQuotes;
 };
 
-/**
- * Returns whether a character is part of a shell word token.
- *
- * @param char Character to inspect.
- */
-const isWordCharacter = (char: string): boolean => /[A-Za-z0-9_]/.test(char);
 
 /**
  * Appends a word character to the current word buffer.

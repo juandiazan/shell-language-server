@@ -1,5 +1,6 @@
 import { Range } from "../../../interfaces/location";
 import { Diagnostic, DiagnosticSeverity, DiagnosticType } from "../../../interfaces/diagnostics";
+import { isWordChar } from "../../../utils/text";
 
 type OpeningBracket = "(" | "[" | "{";
 type ClosingBracket = ")" | "]" | "}";
@@ -231,12 +232,6 @@ const isInsideQuotedString = (parserState: ParserState): boolean => {
   return parserState.inSingleQuotes || parserState.inDoubleQuotes;
 };
 
-/**
- * Returns whether a character is part of a shell word token.
- *
- * @param char Character to inspect.
- */
-const isWordCharacter = (char: string): boolean => /[A-Za-z0-9_]/.test(char);
 
 /**
  * Appends to the current shell word or flushes it into case-state processing.
@@ -251,7 +246,7 @@ const updateCurrentWord = (
   currentChar: string,
   parserState: ParserState
 ): string => {
-  if (isWordCharacter(currentChar)) {
+  if (isWordChar(currentChar)) {
     return currentWord + currentChar;
   }
 

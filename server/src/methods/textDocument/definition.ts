@@ -4,56 +4,13 @@ import { documents, TextDocumentPositionParams } from "../../interfaces/document
 import { RequestMessage } from "../../server";
 import { Location } from "../../interfaces/location";
 import { workspaceRoot, collectShellFiles } from "../../interfaces/workspace";
+import { wordAtPosition } from "../../utils/text";
 
 type DefinitionParams = TextDocumentPositionParams;
 
 const functionKeywordPattern =
   /^(\s*function\s+)([A-Za-z_][A-Za-z0-9_]*)\s*(?:\(\s*\))?\s*(?:\{|$)/;
 const nameParenthesisPattern = /^(\s*)([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)\s*(?:\{|$)/;
-
-/**
- * Returns whether a character can be part of a shell symbol token.
- */
-const isWordChar = (char: string): boolean => /[A-Za-z0-9_]/.test(char);
-
-/**
- * Gets the symbol under (or immediately before) the provided cursor position.
- *
- * @param line Current line content.
- * @param character Cursor character index.
- * @returns The detected symbol or null when no valid token exists at the position.
- */
-const wordAtPosition = (line: string, character: number): string | null => {
-  if (!line.length) {
-    return null;
-  }
-
-  // checks if the current position is a valid symbol
-  let index = Math.min(character, line.length - 1);
-  if (!isWordChar(line[index])) {
-    // if it is not a valid symbol, check one character to the left to take empty spaces into account
-    if (character > 0 && isWordChar(line[character - 1])) {
-      index = character - 1;
-    } else {
-      return null;
-    }
-  }
-
-  // sets lower limit of symbol
-  let start = index;
-  while (start > 0 && isWordChar(line[start - 1])) {
-    start -= 1;
-  }
-
-  // sets upper limit of symbol
-  let end = index + 1;
-  while (end < line.length && isWordChar(line[end])) {
-    end += 1;
-  }
-
-  // returns the characters between start and end
-  return line.slice(start, end);
-};
 
 /**
  * Finds the first matching function-style definition for a symbol in a document.
