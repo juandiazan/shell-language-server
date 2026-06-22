@@ -3,7 +3,7 @@
   "description": "Standalone shell/bash Language Server (LSP) CLI",
   "author": "Juan Diaz",
   "license": "MIT",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "engines": {
     "node": "*"
   },
