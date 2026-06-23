@@ -26,7 +26,9 @@ The config is path-free because the binary is on `PATH`. The repo ships a ready-
 vim.lsp.config["shell-ls"] = {
   cmd = { "shell-language-server" },
   filetypes = { "sh", "bash" },
-  root_markers = { ".git", ".sh" },
+  root_dir = function(bufnr, cb)
+    cb(vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
+  end,
 }
 
 vim.lsp.enable("shell-ls")
